@@ -126,6 +126,19 @@ body::after {
   animation: breathe-glow 6.5s ease-in-out infinite;
 }
 
+.steam {
+  animation: steam-rise 4.8s ease-in-out infinite;
+}
+
+.hover-lift {
+  transition: transform 500ms ease, box-shadow 500ms ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-6px) rotate(var(--hover-r, 0deg));
+  box-shadow: 0 28px 86px rgba(45, 38, 31, 0.16);
+}
+
 @keyframes drift {
   from { transform: translate3d(-18px, 8px, 0) scale(1); }
   to { transform: translate3d(18px, -16px, 0) scale(1.08); }
@@ -170,4 +183,21 @@ body::after {
 @keyframes breathe-glow {
   0%, 100% { opacity: 0.42; filter: blur(34px); }
   50% { opacity: 0.72; filter: blur(48px); }
+}
+
+@keyframes steam-rise {
+  0% { opacity: 0; transform: translate3d(0, 12px, 0) scale(0.92); }
+  35% { opacity: 0.52; }
+  100% { opacity: 0; transform: translate3d(8px, -34px, 0) scale(1.14); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

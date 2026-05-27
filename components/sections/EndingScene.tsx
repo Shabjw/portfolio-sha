@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Copy, Github, Linkedin, Mail } from "lucide-react";
+import { Coffee, Copy, Github, Linkedin, Mail, Telescope } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { portfolioData } from "@/data/portfolioData";
 import { trackEvent } from "@/lib/analytics";
@@ -22,7 +22,7 @@ export function EndingScene() {
       <div className="ambient-orb bottom-[8%] right-[8%] h-96 w-96 bg-[#aeb7df]/18" />
       <div className="section-shell relative z-10 grid gap-10 md:grid-cols-[1.1fr_.9fr]">
         <div>
-          <p className="text-xs uppercase tracking-[0.32em] text-[#ffe0ac]/70">Currently Exploring</p>
+          <p className="flex items-center gap-2 text-xs uppercase tracking-[0.32em] text-[#ffe0ac]/70"><Telescope className="h-4 w-4" /> Currently Exploring</p>
           <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight md:text-5xl">Still organizing the next set of signals.</h2>
           <div className="mt-8 flex flex-wrap gap-3">
             {portfolioData.exploring.map((item) => (
@@ -42,8 +42,9 @@ export function EndingScene() {
             ))}
           </div>
         </div>
-        <div id="contact" className="rounded-[2rem] bg-white/10 p-8 shadow-soft ring-1 ring-white/15 backdrop-blur">
-          <p className="text-xs uppercase tracking-[0.32em] text-[#ffe0ac]/70">Let’s talk</p>
+        <div id="contact" className="relative overflow-hidden rounded-[2rem] bg-white/10 p-8 shadow-soft ring-1 ring-white/15 backdrop-blur">
+          <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-[#ffc17d]/15 blur-2xl" />
+          <p className="relative flex items-center gap-2 text-xs uppercase tracking-[0.32em] text-[#ffe0ac]/70"><Coffee className="h-4 w-4" /> Let’s talk</p>
           <h3 className="mt-4 font-display text-3xl font-semibold">Open to international BA, product ops and data ops roles.</h3>
           <div className="mt-8 grid gap-3">
             <Button variant="secondary" onClick={copyEmail}><Copy className="h-4 w-4" /> {copied ? "Email copied" : "Copy email"}</Button>
