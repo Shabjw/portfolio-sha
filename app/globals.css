@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 39 38% 92%;
+  --foreground: 32 12% 14%;
+  --card: 42 45% 98%;
+  --card-foreground: 32 12% 14%;
+  --primary: 215 38% 22%;
+  --primary-foreground: 42 45% 98%;
+  --muted: 38 24% 90%;
+  --muted-foreground: 32 10% 42%;
+  --accent: 93 18% 58%;
+  --accent-foreground: 32 12% 14%;
+  --border: 34 22% 84%;
+  --input: 34 22% 84%;
+  --ring: 215 38% 22%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 18% 4%, rgba(222, 164, 93, 0.22), transparent 28rem),
+    radial-gradient(circle at 82% 3%, rgba(30, 47, 76, 0.34), transparent 32rem),
+    linear-gradient(180deg, #f8f0e4 0%, #eee3d2 46%, #f7efe2 100%);
+  color: hsl(var(--foreground));
+  font-family: Inter, Manrope, Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+body::after {
+  pointer-events: none;
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.75'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+::selection {
+  background: rgba(151, 164, 126, 0.35);
+}
+
+.paper-grid {
+  background-image: radial-gradient(circle at 1px 1px, rgba(44, 39, 32, 0.08) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+
+.cinematic-shell {
+  width: min(1240px, calc(100% - 32px));
+  margin-inline: auto;
+}
+
+.section-shell {
+  width: min(1120px, calc(100% - 32px));
+  margin-inline: auto;
+}
+
+.ambient-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(46px);
+  opacity: 0.55;
+  animation: drift 12s ease-in-out infinite alternate;
+}
+
+.float-slow {
+  animation: float-slow 7s ease-in-out infinite;
+}
+
+.float-slower {
+  animation: float-slow 10s ease-in-out infinite reverse;
+}
+
+.scanline {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(216, 168, 95, 0.38), transparent);
+  transform: translateX(-100%);
+  animation: scan 4.5s ease-in-out infinite;
+}
+
+.signal-draw {
+  stroke-dasharray: 180;
+  stroke-dashoffset: 180;
+  animation: signal-draw 5.5s ease-in-out infinite;
+}
+
+.signal-pulse {
+  animation: signal-pulse 4.2s ease-in-out infinite;
+}
+
+.signal-bar {
+  transform-origin: bottom;
+  animation: signal-bar 3.8s ease-in-out infinite;
+}
+
+.signal-line {
+  transform-origin: left center;
+  animation: signal-line 5.2s ease-in-out infinite;
+}
+
+.orbit-soft {
+  animation: orbit-soft 18s linear infinite;
+  transform-origin: center;
+}
+
+.breathe-glow {
+  animation: breathe-glow 6.5s ease-in-out infinite;
+}
+
+@keyframes drift {
+  from { transform: translate3d(-18px, 8px, 0) scale(1); }
+  to { transform: translate3d(18px, -16px, 0) scale(1.08); }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(var(--r, 0deg)); }
+  50% { transform: translate3d(0, -12px, 0) rotate(calc(var(--r, 0deg) + 0.7deg)); }
+}
+
+@keyframes scan {
+  0%, 30% { transform: translateX(-100%); }
+  65%, 100% { transform: translateX(100%); }
+}
+
+@keyframes signal-draw {
+  0%, 18% { stroke-dashoffset: 180; opacity: 0.15; }
+  45%, 78% { stroke-dashoffset: 0; opacity: 0.72; }
+  100% { stroke-dashoffset: -180; opacity: 0.1; }
+}
+
+@keyframes signal-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.95; transform: scale(1.14); }
+}
+
+@keyframes signal-bar {
+  0%, 100% { opacity: 0.48; transform: scaleY(0.72); }
+  50% { opacity: 0.92; transform: scaleY(1); }
+}
+
+@keyframes signal-line {
+  0%, 100% { opacity: 0.22; filter: blur(0); }
+  48% { opacity: 0.72; filter: blur(0.4px); }
+}
+
+@keyframes orbit-soft {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes breathe-glow {
+  0%, 100% { opacity: 0.42; filter: blur(34px); }
+  50% { opacity: 0.72; filter: blur(48px); }
+}
