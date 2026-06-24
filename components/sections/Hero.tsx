@@ -1,246 +1,437 @@
 "use client";
 
-import { useState, type CSSProperties, type MouseEvent } from "react";
-import { ArrowRight, FileText, Mail } from "lucide-react";
+import Image from "next/image";
+import { useState, type MouseEvent } from "react";
+import {
+  ArrowRight,
+  BarChart3,
+  Box,
+  FileText,
+  Lightbulb,
+  ListChecks,
+  Mail,
+  MessageCircle,
+  PenTool,
+  Search,
+  Settings2,
+  Target,
+  Users,
+  Waves
+} from "lucide-react";
+import coffeeImage from "@/image/coffee.png";
+import dinoImage from "@/image/dino.png";
+import worldmapImage from "@/image/worldmap.png";
 import { Button } from "@/components/ui/button";
 import { portfolioData } from "@/data/portfolioData";
 import { trackEvent } from "@/lib/analytics";
 
-function ObservatorySky({ glow }: { glow: { x: number; y: number } }) {
-  const responsiveShift = {
-    transform: `translate3d(${(glow.x - 50) * 0.05}px, ${(glow.y - 38) * 0.05}px, 0)`
+const workingStyles = [
+  { label: "Calm", icon: Waves },
+  { label: "Structured", icon: ListChecks },
+  { label: "Curious", icon: Search },
+  { label: "Visual", icon: PenTool }
+];
+
+const peopleNotes = [
+  { quote: "Always asks the right questions.", detail: "Looks past the first request to understand the need underneath." },
+  { quote: "Brings clarity when things get messy.", detail: "Translates scattered information into a shared understanding." },
+  { quote: "Connects people who don't speak the same language.", detail: "Helps business, product, data and operations understand each other." },
+  { quote: "Turns ideas into concrete actions.", detail: "Moves conversations toward practical, reusable systems." },
+  { quote: "Easy to collaborate with.", detail: "Calm, thoughtful and attentive to how people actually work." }
+];
+const peopleNoteColors = ["#fff1c9", "#e5edf1", "#f2e2d7", "#e7e4f0", "#e3e8cb"];
+
+const curiosityItems = [
+  { label: "AI productivity workflows", detail: "Exploring how AI can reduce repetitive work." },
+  { label: "Building with Codex", detail: "Currently creating small applications that automate everyday tasks and reduce friction." },
+  { label: "Product analytics", detail: "Interested in understanding behaviour through data." },
+  { label: "Visual systems thinking", detail: "Exploring how small visual systems create better decisions." },
+  { label: "International product & ops roles", detail: "Especially Spain, Portugal and broader Europe." }
+];
+
+const proofCards = [
+  {
+    title: "CRM & Workflow Optimization",
+    copy: "Improved visibility, follow-up logic and team coordination.",
+    meta: "Sellsy · segmentation · campaigns"
+  },
+  {
+    title: "Process Automation",
+    copy: "Reduced manual preparation through a focused Excel/VBA workflow.",
+    meta: "Excel · VBA · data cleaning"
+  },
+  {
+    title: "Local Authorities Offer",
+    copy: "Structured partner needs through workshops, dashboards and feedback loops.",
+    meta: "+40% partner engagement"
+  }
+];
+
+function HeroAtmosphere() {
+  return (
+    <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_18%,rgba(255,176,92,.72),transparent_26rem),radial-gradient(circle_at_76%_10%,rgba(193,139,185,.38),transparent_31rem),radial-gradient(circle_at_54%_58%,rgba(108,146,182,.48),transparent_40rem),linear-gradient(138deg,#d98c50_0%,#9f6f82_28%,#6387a6_58%,#233f5b_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,235,207,.22),transparent_42%,rgba(23,43,64,.36))]" />
+      <div className="absolute inset-0 opacity-[.16] paper-grid" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_46%,transparent_0,transparent_48%,rgba(28,31,48,.23)_100%)]" />
+      <div className="ambient-orb left-[7%] top-[13%] h-80 w-80 bg-[#ffd08a]/30" />
+      <div className="ambient-orb right-[10%] top-[10%] h-96 w-96 bg-[#c7b7e7]/20" />
+      <div className="absolute left-[8%] top-[21%] h-1 w-1 rounded-full bg-white/60 shadow-[130px_34px_0_rgba(255,255,255,.22),430px_-12px_0_rgba(255,255,255,.22),750px_60px_0_rgba(255,255,255,.18),1020px_10px_0_rgba(255,255,255,.24)]" />
+      <svg className="absolute right-[5%] top-[8%] h-[38%] w-[44%] opacity-[.12]" viewBox="0 0 620 360" fill="none">
+        <path d="M48 192 142 112l78 47 88-103 96 78 142-70M220 159l66 92 118-117 92 118" stroke="#fff5dd" strokeWidth="1" />
+        {[ [48,192], [142,112], [220,159], [308,56], [404,134], [546,64], [286,251], [496,252] ].map(([cx, cy]) => <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="3" fill="#fff5dd" />)}
+      </svg>
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[#f7efe2]" />
+    </div>
+  );
+}
+
+function Flag({ country }: { country: "fr" | "gb" | "es" | "it" | "in" }) {
+  if (country === "fr" || country === "it") {
+    const colors = country === "fr" ? ["#1f4b8f", "#fff", "#e43d46"] : ["#1f8b4c", "#fff", "#d33d45"];
+    return (
+      <svg viewBox="0 0 24 16" className="h-1.5 w-2.5 overflow-hidden rounded-[2px] shadow-sm" aria-hidden="true">
+        <path fill={colors[0]} d="M0 0h8v16H0z" /><path fill={colors[1]} d="M8 0h8v16H8z" /><path fill={colors[2]} d="M16 0h8v16h-8z" />
+      </svg>
+    );
+  }
+  if (country === "es") {
+    return <svg viewBox="0 0 24 16" className="h-1.5 w-2.5 overflow-hidden rounded-[2px] shadow-sm" aria-hidden="true"><path fill="#aa1f2e" d="M0 0h24v16H0z" /><path fill="#f3c842" d="M0 4h24v8H0z" /></svg>;
+  }
+  if (country === "in") {
+    return <svg viewBox="0 0 24 16" className="h-1.5 w-2.5 overflow-hidden rounded-[2px] shadow-sm" aria-hidden="true"><path fill="#ef8b3a" d="M0 0h24v5.34H0z" /><path fill="#fff" d="M0 5.33h24v5.34H0z" /><path fill="#2d8a4e" d="M0 10.66h24V16H0z" /><circle cx="12" cy="8" r="1.5" fill="none" stroke="#34558b" strokeWidth=".7" /></svg>;
+  }
+  return (
+    <svg viewBox="0 0 24 16" className="h-1.5 w-2.5 overflow-hidden rounded-[2px] shadow-sm" aria-hidden="true">
+      <path fill="#24457d" d="M0 0h24v16H0z" /><path stroke="#fff" strokeWidth="4" d="M0 0l24 16M24 0 0 16" /><path stroke="#c83d4d" strokeWidth="2" d="M0 0l24 16M24 0 0 16" /><path stroke="#fff" strokeWidth="6" d="M12 0v16M0 8h24" /><path stroke="#c83d4d" strokeWidth="3" d="M12 0v16M0 8h24" />
+    </svg>
+  );
+}
+
+function WorkingStylePanel() {
+  return (
+    <aside className="relative p-3 text-[#243850] md:border-l md:border-[#243850]/10 md:px-4 md:py-3">
+      <p className="text-[13px] font-semibold uppercase tracking-[0.18em] text-[#6f5d50]">Working style</p>
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        {workingStyles.map(({ label, icon: Icon }) => (
+          <div key={label} className="group flex items-center gap-2.5 border-b border-[#243850]/8 px-1 py-1.5 transition duration-300 hover:translate-x-1">
+            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#f4dfc8] text-[#a96645] shadow-[inset_0_0_0_1px_rgba(169,102,69,.08)] transition group-hover:bg-[#243850] group-hover:text-white">
+              <Icon className="h-[17px] w-[17px]" strokeWidth={1.7} />
+            </span>
+            <span className="text-[13px] font-medium">{label}</span>
+          </div>
+        ))}
+      </div>
+      <div className="mt-3 border-t border-[#243850]/10 pt-2.5">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6f5d50]">Things people often say</p>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          {peopleNotes.map((note, index) => (
+            <div key={note.quote} style={{ backgroundColor: peopleNoteColors[index], transform: `rotate(${index % 2 ? 0.5 : -0.45}deg)` }} className={`group relative flex min-h-[2.5rem] items-center justify-center overflow-hidden rounded-sm px-2 py-1.5 text-center text-[11px] leading-[.9rem] text-[#4e5966]/85 shadow-[0_8px_20px_rgba(45,38,31,.05)] transition hover:z-10 hover:-translate-y-1 hover:rotate-0 ${index === 4 ? "col-span-2" : ""}`}>
+              <p className="font-semibold transition duration-300 group-hover:-translate-y-1 group-hover:opacity-0">“{note.quote}”</p>
+              <p className="absolute inset-0 flex translate-y-2 items-center justify-center bg-[#243850] p-2 text-center text-[13px] leading-4 text-white opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">{note.detail}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+function ThinkingDiagram() {
+  const [activeNode, setActiveNode] = useState<string | null>(null);
+  const nodes = [
+    { id: "workshops", label: "Workshops", insight: "I enjoy facilitating conversations that uncover the actual problem behind the first request.", icon: Users, className: "left-[1%] top-0 bg-[#f8e6c9] sm:left-[5%]" },
+    { id: "feedback", label: "Feedback", insight: "I listen for repeated friction: it often says more than a single feature request.", icon: MessageCircle, className: "left-1/2 top-0 -translate-x-1/2 bg-[#f7d9cf]" },
+    { id: "questions", label: "Questions", insight: "I ask simple questions until the team can see the real need together.", icon: Search, className: "right-[1%] top-0 bg-[#e8e7d5] sm:right-[5%]" },
+    { id: "understanding", label: "Understanding", insight: "I turn scattered signals into a shared picture people can act on.", icon: Lightbulb, className: "left-1/2 top-[2.75rem] -translate-x-1/2 bg-[#fff3d8]" },
+    { id: "data", label: "Data", insight: "I use data to test assumptions and make trade-offs easier to explain.", icon: BarChart3, className: "left-[3%] top-[5.65rem] bg-[#dbe8ef] sm:left-[8%]" },
+    { id: "product", label: "Product", insight: "I translate what we learn into improvements people can actually use.", icon: Box, className: "left-1/2 top-[5.65rem] -translate-x-1/2 bg-[#e8dfee]" },
+    { id: "operations", label: "Operations", insight: "I shape workflows that stay clear when the work becomes busy.", icon: Settings2, className: "right-[1%] top-[5.65rem] bg-[#f7dfaa] sm:right-[7%]" },
+    { id: "decisions", label: "Clearer Decisions", insight: "The goal is never the diagram. The goal is a decision people can act on.", icon: Target, className: "bottom-0 left-1/2 -translate-x-1/2 bg-[#dfe3bc]" }
+  ];
+  const paths: Record<string, string[]> = {
+    workshops: ["workshops", "understanding", "operations", "decisions"],
+    feedback: ["feedback", "understanding", "product", "decisions"],
+    questions: ["questions", "understanding", "data", "decisions"],
+    understanding: ["understanding", "data", "product", "operations", "decisions"],
+    data: ["data", "decisions"],
+    product: ["product", "decisions"],
+    operations: ["operations", "decisions"],
+    decisions: ["decisions"]
   };
+  const activeInsight = nodes.find((node) => node.id === activeNode)?.insight;
+  const activePath = activeNode ? paths[activeNode] : [];
+  const edgeIsActive = (from: string, to: string) => Boolean(activeNode && activePath.includes(from) && activePath.includes(to));
+  const edgeStyle = (from: string, to: string) => ({
+    opacity: !activeNode ? 0.58 : edgeIsActive(from, to) ? 0.98 : 0.1,
+    strokeWidth: edgeIsActive(from, to) ? 3 : 2
+  });
+  const edgeClass = (from: string, to: string) => `transition-all duration-300 ${edgeIsActive(from, to) ? "thinking-path-active" : ""}`;
+  const nodeOpacity = (id: string) => !activeNode || activePath.includes(id) ? 1 : 0.25;
+  const nodeClass = "absolute z-10 flex items-center justify-center gap-1.5 rounded-full border border-[#263c54]/18 bg-[#fff8eb] px-2.5 py-2 text-xs font-semibold shadow-paper transition duration-300 hover:-translate-y-0.5 hover:border-[#b77954]/40 hover:shadow-[0_0_24px_rgba(183,121,84,.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b77954]/45 sm:gap-2 sm:px-4 sm:py-2.5 sm:text-sm";
 
   return (
-    <>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_15%,rgba(255,176,92,.62),transparent_25rem),radial-gradient(circle_at_77%_11%,rgba(191,142,187,.34),transparent_29rem),radial-gradient(circle_at_58%_56%,rgba(116,151,184,.56),transparent_38rem),linear-gradient(135deg,#dc8f50_0%,#a46e83_27%,#6d91b0_58%,#274866_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,231,199,.26),rgba(96,131,166,.18)_44%,rgba(30,56,82,.48))]" />
-      <div className="absolute inset-0 opacity-20 paper-grid" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_48%,transparent_0,transparent_51%,rgba(47,47,68,.18)_100%)]" />
-      <div className="ambient-orb left-[9%] top-[12%] h-80 w-80 bg-[#ffd08a]/32" />
-      <div className="ambient-orb right-[14%] top-[8%] h-96 w-96 bg-[#c6b9ef]/24" />
-      <div className="ambient-orb bottom-[16%] right-[30%] h-72 w-72 bg-[#e9f3ff]/16 breathe-glow" />
-      <div className="absolute left-[8%] top-[18%] h-1 w-1 rounded-full bg-white/70 shadow-[90px_34px_0_rgba(255,255,255,.28),210px_-18px_0_rgba(255,255,255,.22),520px_22px_0_rgba(255,255,255,.32),760px_80px_0_rgba(255,255,255,.22),980px_12px_0_rgba(255,255,255,.28)]" />
-      <svg className="absolute right-[9%] top-[18%] h-44 w-72 text-white/16 transition-transform duration-700" style={responsiveShift} viewBox="0 0 280 170" fill="none" aria-hidden="true">
-        <path className="signal-draw [animation-delay:.8s]" d="M32 118 88 74l58 22 96-58" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
-        <circle className="signal-pulse" cx="32" cy="118" r="2.4" fill="currentColor" />
-        <circle className="signal-pulse [animation-delay:.7s]" cx="146" cy="96" r="2.4" fill="currentColor" />
-        <circle className="signal-pulse [animation-delay:1.3s]" cx="242" cy="38" r="2.4" fill="currentColor" />
-        <circle className="orbit-soft opacity-35 [animation-duration:28s]" cx="166" cy="86" r="46" stroke="currentColor" strokeWidth=".6" strokeDasharray="2 10" />
+    <div className="mx-auto w-full max-w-[43rem] text-[#263c54]">
+      <div className="relative h-[10.9rem] w-full">
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 700 216" fill="none" aria-hidden="true">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M0 0 10 5 0 10Z" fill="#735d50" fillOpacity=".58" />
+          </marker>
+        </defs>
+        <path d="M106 34C140 62 260 52 322 72" stroke="#735d50" style={edgeStyle("workshops", "understanding")} markerEnd="url(#arrow)" className={edgeClass("workshops", "understanding")} />
+        <path d="M350 34v36" stroke="#735d50" style={edgeStyle("feedback", "understanding")} markerEnd="url(#arrow)" className={edgeClass("feedback", "understanding")} />
+        <path d="M594 34C560 62 440 52 378 72" stroke="#735d50" style={edgeStyle("questions", "understanding")} markerEnd="url(#arrow)" className={edgeClass("questions", "understanding")} />
+        <path d="M350 96C310 118 206 109 145 139" stroke="#735d50" style={edgeStyle("understanding", "data")} markerEnd="url(#arrow)" className={edgeClass("understanding", "data")} />
+        <path d="M350 96v40" stroke="#735d50" style={edgeStyle("understanding", "product")} markerEnd="url(#arrow)" className={edgeClass("understanding", "product")} />
+        <path d="M350 96C390 118 494 109 555 139" stroke="#735d50" style={edgeStyle("understanding", "operations")} markerEnd="url(#arrow)" className={edgeClass("understanding", "operations")} />
+        <path d="M145 158C190 185 276 175 326 196" stroke="#735d50" style={edgeStyle("data", "decisions")} markerEnd="url(#arrow)" className={edgeClass("data", "decisions")} />
+        <path d="M350 158v36" stroke="#735d50" style={edgeStyle("product", "decisions")} markerEnd="url(#arrow)" className={edgeClass("product", "decisions")} />
+        <path d="M555 158C510 185 424 175 374 196" stroke="#735d50" style={edgeStyle("operations", "decisions")} markerEnd="url(#arrow)" className={edgeClass("operations", "decisions")} />
       </svg>
-      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent to-[#f7efe2]" />
+
+      {nodes.map(({ id, label, icon: Icon, className }) => (
+        <button key={id} type="button" onMouseEnter={() => setActiveNode(id)} onMouseLeave={() => setActiveNode(null)} onFocus={() => setActiveNode(id)} onBlur={() => setActiveNode(null)} onClick={() => setActiveNode(activeNode === id ? null : id)} style={{ opacity: nodeOpacity(id) }} className={`${nodeClass} ${className}`}>
+          <Icon className="h-4 w-4 text-[#a36d4e]" />{label}
+        </button>
+      ))}
+      </div>
+      <div className="relative z-20 mx-auto mt-1 min-h-[3rem] w-[94%] border-l-2 border-[#b77954]/45 px-4 py-1 text-[17px] italic leading-6 text-[#4e5966] transition">
+        {activeInsight ?? "Follow a thread to see the observation behind it."}
+      </div>
+    </div>
+  );
+}
+
+function CuriosityBlock() {
+  const [active, setActive] = useState(0);
+
+  return (
+    <footer className="grid gap-3 rounded-xl bg-[#243850]/[.055] px-4 py-3 md:grid-cols-[auto_1fr] md:items-center">
+      <p className="text-xs font-semibold uppercase tracking-[0.17em] text-[#6f5d50]">Currently exploring</p>
+      <div>
+        <div className="flex flex-wrap gap-1.5 md:justify-end">
+          {curiosityItems.map((item, index) => (
+            <button key={item.label} type="button" onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => setActive(index)} className={`rounded-full px-2.5 py-1 text-[11px] transition ${active === index ? "bg-[#243850] text-white" : "bg-white/55 text-[#4e5966] hover:bg-white"}`}>
+              {item.label}
+            </button>
+          ))}
+        </div>
+        <p className="mt-2 text-xs leading-4 text-[#4e5966] md:text-right">{curiosityItems[active].detail}</p>
+      </div>
+    </footer>
+  );
+}
+
+function VisualThinkingBoard() {
+  return (
+    <div className="relative h-full overflow-hidden rounded-[1.45rem] bg-[#e9e0d4] text-[#223750]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_4%,rgba(255,190,112,.28),transparent_16rem),radial-gradient(circle_at_88%_30%,rgba(118,145,180,.22),transparent_18rem)]" />
+      <div className="absolute inset-0 opacity-30 paper-grid" />
+      <div className="absolute inset-0 bg-[linear-gradient(116deg,transparent_5%,rgba(255,255,255,.42)_28%,transparent_42%)] opacity-55" />
+
+      <div className="relative grid h-full grid-rows-[auto_auto_auto_auto] gap-2.5 p-4 md:gap-2 md:p-4">
+        <header className="border-b border-[#243850]/10 pb-3">
+          <div className="max-w-[72%]">
+            <div className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-[#b56f48] shadow-[0_0_12px_rgba(181,111,72,.5)]" />
+              <p className="text-sm font-semibold uppercase tracking-[0.24em]">Shana OS</p>
+            </div>
+            <p className="mt-1.5 text-xl font-semibold md:text-[22px]">Business Analyst · Product &amp; Operations</p>
+            <p className="mt-1 text-[13px] leading-5 text-[#5f6570] sm:text-[15px] md:whitespace-nowrap">Turning messy information into something clear, useful and actionable.</p>
+          </div>
+          <div className="mt-2 flex max-w-[72%] flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] text-[#4e5966]">
+            <div className="flex flex-wrap gap-1.5">
+              <span className="rounded-full bg-[#243850] px-2.5 py-1.5 text-white">Paris-based</span>
+              <span className="rounded-full bg-white/70 px-2.5 py-1.5">Open internationally</span>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              <span className="flex items-center gap-1"><Flag country="fr" />French · Native</span>
+              <span className="flex items-center gap-1"><Flag country="gb" />English · C2</span>
+              <span className="flex items-center gap-1"><Flag country="es" />Spanish · C1</span>
+              <span className="flex items-center gap-1"><Flag country="it" />Italian · A2</span>
+              <span className="flex items-center gap-1"><Flag country="in" />Hindi · A2</span>
+            </div>
+          </div>
+        </header>
+
+        <div className="grid gap-3 md:grid-cols-[1.48fr_.52fr] md:gap-4">
+          <section className="relative overflow-hidden rounded-2xl bg-[#fff8eb]/82 p-3 shadow-paper ring-1 ring-white/60">
+            <div className="flex items-center justify-between px-2 pt-1">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6f5d50]">How I think</p>
+            </div>
+            <ThinkingDiagram />
+            <div className="mx-auto mt-1 max-w-[45rem] border-t border-[#243850]/10 px-3 pt-2.5 text-[14px] leading-5 text-[#4e5966]">
+              <p>Most projects start with scattered information, unclear requests or disconnected teams.</p>
+              <p className="mt-1 font-medium text-[#243850]">My role is to understand what people actually need, connect the right information and turn it into something actionable.</p>
+            </div>
+          </section>
+          <WorkingStylePanel />
+        </div>
+
+        <section>
+          <div className="mb-2 flex items-center justify-between">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6f5d50]">Selected work</p>
+            <a href="#work" className="text-[11px] font-medium text-[#b56f48] hover:underline">See selected work</a>
+          </div>
+          <div className="grid gap-3 md:grid-cols-3">
+            {proofCards.map((card, index) => (
+              <a key={card.title} href="#work" className="group relative z-10 min-h-[7.5rem] overflow-hidden rounded-xl bg-[#fff8eb]/90 p-3.5 shadow-paper ring-1 ring-white/70 transition duration-300 hover:z-30 hover:-translate-y-1 hover:scale-[1.018] hover:bg-white">
+                <div className="transition duration-300 group-hover:-translate-y-2 group-hover:opacity-0">
+                <div className="flex items-center gap-2">
+                  <span className="grid h-7 w-7 place-items-center rounded-full bg-[#243850] text-[10px] text-white">0{index + 1}</span>
+                  <p className="text-[15px] font-semibold">{card.title}</p>
+                </div>
+                {index === 0 && (
+                  <div className="mt-3 grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-center">
+                    <div className="rounded-lg bg-[#f1ddd4] px-2 py-2"><span className="text-[9px] uppercase tracking-[.12em] text-[#95634c]">Before</span><p className="mt-1 text-[12px] font-medium">Scattered follow-up</p></div>
+                    <ArrowRight className="h-4 w-4 text-[#b77954]" />
+                    <div className="rounded-lg bg-[#dfe7d2] px-2 py-2"><span className="text-[9px] uppercase tracking-[.12em] text-[#60714f]">After</span><p className="mt-1 text-[12px] font-medium">Structured CRM</p></div>
+                  </div>
+                )}
+                {index === 1 && (
+                  <div className="mt-3 flex items-center justify-center gap-4 text-center">
+                    <p><strong className="block text-2xl text-[#9a684a]">20–25</strong><span className="text-[11px] text-[#6f5d50]">minutes</span></p>
+                    <ArrowRight className="h-5 w-5 text-[#b77954]" />
+                    <p><strong className="block text-[28px] leading-7 text-[#243850]">under 5</strong><span className="text-[11px] text-[#6f5d50]">minutes</span></p>
+                  </div>
+                )}
+                {index === 2 && (
+                  <div className="relative mx-auto mt-3 h-12 max-w-[15rem]">
+                    <div className="absolute left-0 top-0 rounded-full bg-[#f3d9cd] px-3 py-1.5 text-[10px]">workshops</div>
+                    <div className="absolute right-0 top-0 rounded-full bg-[#dce7ec] px-3 py-1.5 text-[10px]">partner needs</div>
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-full bg-[#e0e5c8] px-3 py-1.5 text-[10px] font-semibold">clearer offer</div>
+                    <svg className="absolute inset-0 h-full w-full" viewBox="0 0 240 56" aria-hidden="true"><path d="M54 20 112 42M186 20l-58 22" stroke="#8d725e" strokeWidth="1.5" strokeDasharray="4 4" /></svg>
+                  </div>
+                )}
+                </div>
+                <div className="absolute inset-0 translate-y-3 bg-[#243850] p-4 text-white opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  <p className="text-[11px] uppercase tracking-[0.16em] text-[#f5c98d]">Working note · 0{index + 1}</p>
+                  <div className="mt-3 text-sm leading-5">
+                    <p>{card.copy}</p>
+                    <p className="mt-3 font-medium text-[#f5c98d]">{card.meta}</p>
+                    <div className="mt-3 flex items-center gap-2 text-[9px] uppercase tracking-[0.12em] text-white/65">
+                      <span>problem</span><span className="h-px flex-1 bg-white/20" /><span>system</span><span className="h-px flex-1 bg-white/20" /><span>outcome</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <CuriosityBlock />
+      </div>
+    </div>
+  );
+}
+
+function Laptop() {
+  return (
+    <div className="relative z-30 mx-auto min-w-0 w-[calc(100vw-32px)] max-w-[1320px] sm:w-full">
+      <div className="breathe-glow absolute inset-x-[12%] -bottom-8 h-28 rounded-full bg-[#ffc27b]/28 blur-3xl" />
+      <div className="relative min-h-[610px] rounded-[2.25rem] bg-[#142338] p-3 shadow-[0_70px_170px_rgba(27,34,51,.48)] ring-1 ring-white/28 md:min-h-[580px] md:p-4">
+        <VisualThinkingBoard />
+        <div className="pointer-events-none absolute inset-x-8 top-3 h-20 rounded-full bg-white/8 blur-2xl" />
+        <div className="absolute left-1/2 top-1.5 h-1.5 w-16 -translate-x-1/2 rounded-full bg-black/35" />
+      </div>
+      <div className="relative mx-auto h-9 w-[92%] rounded-b-[2.5rem] bg-[linear-gradient(180deg,#1a2738,#111b29)] shadow-[0_25px_55px_rgba(26,29,40,.35)]">
+        <div className="absolute left-1/2 top-0 h-2 w-36 -translate-x-1/2 rounded-b-xl bg-white/10" />
+      </div>
+    </div>
+  );
+}
+
+function WorkspaceObjects({ parallax }: { parallax: { x: number; y: number } }) {
+  return (
+    <>
+      <div className="absolute -left-[12%] bottom-[1%] z-40 hidden w-[15.25rem] lg:block xl:-left-[9%]" style={{ transform: `translate3d(${parallax.x * -0.7}px, ${parallax.y * -0.5}px, 0)` }}>
+        <div className="coffee-object group relative transition-transform duration-500 hover:scale-[1.03]">
+          <Image src={coffeeImage} alt="Hand-drawn cup of coffee" className="h-auto w-full drop-shadow-[0_22px_30px_rgba(47,31,25,.28)]" priority />
+          <span className="steam absolute left-[47%] top-[1%] h-16 w-6 rounded-full border-l border-[#fff3dc]/55 [animation-delay:.5s]" />
+          <span className="steam absolute left-[57%] top-[-3%] h-20 w-8 rounded-full border-l border-[#fff3dc]/40 [animation-delay:1.4s]" />
+          <div className="pointer-events-none absolute -right-44 top-5 w-48 translate-x-2 rounded-xl bg-[#fff4df]/95 p-3 text-[11px] leading-4 text-[#5f493b] opacity-0 shadow-paper transition duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+            Some of my best ideas started in cafés. Thinking fuel.
+          </div>
+        </div>
+      </div>
+
+      <div className="group absolute -right-[8%] bottom-[39%] z-40 hidden h-56 w-44 lg:block xl:-right-[6%]" style={{ transform: `translate3d(${parallax.x * 0.65}px, ${parallax.y * 0.45}px, 0) rotate(4deg)`, perspective: "800px" }}>
+        <div className="relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+          <div className="absolute inset-0 [backface-visibility:hidden]">
+            <Image src={dinoImage} alt="Instax-style sunset memory with a small dinosaur playing badminton" className="h-auto w-full drop-shadow-[0_26px_35px_rgba(37,29,28,.3)]" priority />
+          </div>
+          <div className="absolute inset-0 grid place-items-center rounded-sm bg-[#fff1d3] p-3 text-center text-[9px] leading-4 text-[#5f493b] shadow-paper [backface-visibility:hidden] [transform:rotateY(180deg)]">
+            <p><strong>Tiny fossil enthusiast.</strong><br /><br />Also surprisingly competitive at badminton.</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute -right-[6%] top-[3%] z-40 hidden w-[17rem] opacity-95 lg:block xl:-right-[5%] xl:w-[19rem]" style={{ transform: `translate3d(${parallax.x * 0.28}px, ${parallax.y * 0.22}px, 0) rotate(2deg)` }}>
+        <div className="travel-note group relative transition-transform duration-700 hover:rotate-[-2deg] hover:scale-[1.02]">
+          <span className="absolute -top-2 left-1/2 z-10 h-5 w-14 -translate-x-1/2 rotate-[3deg] bg-[#f6d6a5]/75 shadow-paper" />
+          <div className="relative h-36 overflow-hidden rounded-sm drop-shadow-[0_20px_34px_rgba(37,29,28,.2)] xl:h-40">
+            <Image src={worldmapImage} alt="Travel sketch connecting Paris, Tenerife and Seoul" className="absolute left-0 top-[-11.2rem] h-auto w-full xl:top-[-12.8rem]" priority />
+          </div>
+          <div className="pointer-events-none absolute -bottom-20 right-0 w-52 translate-y-2 rounded-xl bg-[#fff4df]/95 p-3 text-[11px] leading-4 text-[#5f493b] opacity-0 shadow-paper transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+            Paris → Tenerife → Seoul. International environments feel like home.
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute -left-[5%] top-[18%] z-40 hidden w-40 -rotate-[3deg] rounded-sm bg-[#ffe6a9] p-4 text-[#4c382d] shadow-[0_22px_46px_rgba(50,35,29,.22)] ring-1 ring-white/55 lg:block xl:-left-[4%]">
+        <span className="absolute -top-3 right-6 h-6 w-16 rotate-[7deg] bg-[#f6d6a5]/78 shadow-paper" />
+        <p className="font-serif text-base italic leading-6">Reduce friction.<br />Clarify the next step.</p>
+        <div className="mt-5 flex items-center gap-2 text-[9px] uppercase tracking-[0.17em] text-[#916c51]">
+          <span className="h-px flex-1 bg-[#916c51]/28" /><span>working note</span>
+        </div>
+      </div>
+
+      <div className="group absolute -bottom-[2%] left-[18%] z-20 hidden w-40 rotate-[-5deg] rounded-sm bg-[#f8edda] p-4 text-[#5f493b] shadow-paper ring-1 ring-white/55 transition duration-500 hover:-translate-y-12 hover:rotate-[-2deg] lg:block">
+        <div className="absolute inset-y-0 left-4 w-px bg-[#c98d72]/28" />
+        <p className="pl-4 text-[9px] uppercase tracking-[0.18em] text-[#916c51]">Current ideas</p>
+        <div className="mt-3 space-y-2 pl-4 text-[10px] leading-4 opacity-55 transition group-hover:opacity-100">
+          <p>AI workflows</p><p>Product operations</p><p>Better systems</p><p>Next project?</p>
+        </div>
+      </div>
+
+      <div className="mx-auto mt-4 flex max-w-md items-center justify-center gap-3 lg:hidden">
+        <Image src={coffeeImage} alt="Coffee" className="h-auto w-20 drop-shadow-lg" />
+        <Image src={worldmapImage} alt="Paris, Tenerife and Seoul travel sketch" className="h-auto w-28 drop-shadow-lg" />
+        <Image src={dinoImage} alt="Sunset dinosaur memory" className="h-auto w-16 rotate-[4deg] drop-shadow-lg" />
+      </div>
     </>
   );
 }
 
-function LaptopScreen() {
-  return (
-    <div className="absolute left-1/2 top-8 z-30 h-[276px] w-[min(82vw,610px)] -translate-x-1/2 rounded-[2.1rem] bg-[#17263a] p-4 shadow-[0_56px_150px_rgba(70,70,92,.42)] ring-1 ring-white/28 md:h-[324px]">
-      <div className="absolute -inset-10 -z-10 rounded-[3.2rem] bg-[#ffc37b]/18 blur-3xl" />
-      <div className="relative h-full overflow-hidden rounded-[1.35rem] bg-[#203954]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(255,205,140,.34),transparent_15rem),radial-gradient(circle_at_80%_42%,rgba(184,178,224,.25),transparent_18rem)]" />
-        <div className="absolute inset-0 opacity-20 paper-grid" />
-        <div className="absolute inset-0 bg-[linear-gradient(118deg,transparent_8%,rgba(255,255,255,.18)_31%,transparent_43%,transparent)] opacity-60" />
-        <div className="absolute -left-24 top-20 h-20 w-[145%] rotate-[-15deg] bg-white/10 blur-2xl" />
-
-        <div className="absolute left-7 top-6 text-[10px] uppercase tracking-[0.28em] text-[#ffe0ac]/78">Shana OS · operational snapshot</div>
-        <div className="absolute right-7 top-6 rounded-full bg-white/10 px-3 py-1 text-[9px] uppercase tracking-[0.16em] text-white/68 ring-1 ring-white/10">Business Analyst · Product Ops</div>
-
-        <div className="absolute left-7 top-16 h-[94px] w-[178px] rounded-2xl bg-white/9 p-3 ring-1 ring-white/12 scanline">
-          <p className="text-[9px] uppercase tracking-[0.18em] text-white/52">analytics</p>
-          <p className="mt-1 text-[18px] font-semibold text-[#fff4da]">+40%</p>
-          <p className="-mt-0.5 text-[9px] text-[#ffe0ac]/74">partner engagement</p>
-          <div className="mt-3 flex items-end gap-1.5">
-            {[18, 25, 22, 34, 31, 42].map((height, index) => (
-              <span key={index} className="signal-bar w-4 rounded-t-md bg-[#ffc17d]/70" style={{ height, animationDelay: `${index * 0.22}s` }} />
-            ))}
-          </div>
-        </div>
-
-        <div className="absolute right-7 top-16 h-[94px] w-[218px] rounded-2xl bg-white/8 p-3 ring-1 ring-white/12">
-          <p className="text-[9px] uppercase tracking-[0.18em] text-white/52">systems map</p>
-          <svg className="mt-3 h-12 w-full text-[#ffe0ac]/78" viewBox="0 0 190 54" fill="none">
-            <path className="signal-draw" d="M24 28h42m28 0h42m28 0h10" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-            {[
-              ["CRM", 22, 28],
-              ["Product", 80, 28],
-              ["Ops", 142, 28],
-              ["Data", 172, 28]
-            ].map(([label, cx, cy], index) => (
-              <g key={label}>
-                <circle className="signal-pulse" style={{ animationDelay: `${index * 0.35}s` }} cx={Number(cx)} cy={Number(cy)} r="3" fill="currentColor" />
-                <text x={Number(cx) - 11} y={Number(cy) - 10} fill="currentColor" fontSize="8" opacity=".85">{label}</text>
-              </g>
-            ))}
-          </svg>
-          <p className="text-[9px] text-white/58">connecting teams into one shared picture</p>
-        </div>
-
-        <div className="absolute left-7 top-[168px] hidden rounded-2xl bg-white/7 px-3 py-2 text-[10px] text-white/70 ring-1 ring-white/10 md:block">
-          SQL · Power BI · Metabase · Excel
-        </div>
-
-        <div className="absolute right-7 top-[168px] hidden rounded-2xl bg-white/7 px-3 py-2 text-[10px] text-white/70 ring-1 ring-white/10 md:block">
-          FR · EN · ES
-        </div>
-
-        <div className="absolute bottom-8 left-7 right-7 grid grid-cols-[1fr_.92fr] gap-4">
-          <pre className="rounded-2xl bg-[#111b2b]/76 p-4 font-mono text-[10px] leading-5 text-[#ffe0ac]/88">SELECT clarity{"\n"}FROM messy_systems{"\n"}WHERE users = supported;</pre>
-          <div className="rounded-2xl bg-[#fff5df]/13 p-4 ring-1 ring-white/12">
-            <p className="text-[9px] uppercase tracking-[0.18em] text-white/48">profile snapshot</p>
-            <div className="mt-3 grid grid-cols-2 gap-2 text-[10px] text-white/72">
-              <span>FR / EN / ES</span>
-              <span>Paris based</span>
-              <span>Open Europe</span>
-              <span>Product · Ops · Data</span>
-            </div>
-            <p className="mt-3 text-[9px] text-[#ffe0ac]/68">clear systems, useful workflows</p>
-          </div>
-        </div>
-
-        <div className="absolute left-[52%] top-[52%] h-2 w-2 rounded-full bg-white/60 shadow-[0_0_16px_rgba(255,255,255,.7)] transition-transform duration-700" />
-      </div>
-    </div>
-  );
-}
-
-function DeskScene({ tilt }: { tilt: { x: number; y: number } }) {
-  return (
-    <div
-      className="relative mx-auto mt-4 h-[420px] w-full max-w-5xl md:mt-0 md:h-[462px]"
-      style={{ transform: `perspective(1400px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)` }}
-    >
-      <div className="absolute inset-x-[2%] bottom-[-18px] h-[286px] rounded-[3.5rem] bg-[linear-gradient(135deg,rgba(255,239,213,.58),rgba(151,112,91,.24)_48%,rgba(88,116,150,.18))] shadow-[0_64px_160px_rgba(73,60,70,.38)] ring-1 ring-white/24 backdrop-blur-md md:h-[322px]" />
-      <div className="absolute inset-x-[8%] bottom-8 h-[230px] rounded-[2rem] bg-[#6f5348]/22 blur-2xl" />
-      <div className="absolute left-[14%] top-[52%] h-28 w-72 rotate-[-8deg] rounded-full bg-[#ffc17d]/17 blur-3xl" />
-      <div className="absolute right-[12%] top-[36%] h-40 w-72 rotate-[12deg] rounded-full bg-[#aeb7df]/18 blur-3xl" />
-
-      <div className="absolute left-[7%] top-[92px] h-40 w-56 rounded-[1.4rem] bg-[#fff4df]/92 p-5 text-[#2f251f] shadow-soft ring-1 ring-white/65 float-slower" style={{ "--r": "-8deg" } as CSSProperties}>
-        <span className="absolute -top-3 left-9 h-6 w-16 rotate-[5deg] rounded-sm bg-[#f8dfb8]/72 shadow-paper" />
-        <p className="text-[10px] uppercase tracking-[0.24em] text-[#7f654f]">working note</p>
-        <p className="mt-4 max-w-[11rem] text-[13px] leading-5 text-[#4a382e]">Reduce friction. Keep systems human.</p>
-        <div className="mt-4 flex items-center gap-2 text-[9px] text-[#7f654f]/70">
-          <span>needs</span>
-          <span className="h-px flex-1 bg-[#7f654f]/25" />
-          <span>workflow</span>
-        </div>
-      </div>
-
-      <LaptopScreen />
-
-      <div className="absolute bottom-[58px] left-1/2 z-20 h-10 w-[min(72vw,650px)] -translate-x-1/2 rounded-b-[2.4rem] bg-[#141d2c] shadow-[0_22px_86px_rgba(45,43,60,.35)]" />
-      <div className="absolute bottom-[46px] left-1/2 z-10 h-4 w-[min(48vw,420px)] -translate-x-1/2 rounded-full bg-[#f0b76e]/44 blur-md" />
-
-      <div className="absolute bottom-[70px] left-[8%] z-40 hidden h-24 w-24 md:block">
-        <div className="absolute left-7 top-7 h-12 w-14 rounded-b-[1.2rem] rounded-t-md bg-[#fff4df]/92 shadow-paper ring-1 ring-white/70" />
-        <div className="absolute left-[4.4rem] top-10 h-6 w-5 rounded-r-full border-2 border-[#fff4df]/85" />
-        <div className="absolute left-9 top-[3.1rem] h-2 w-10 rounded-full bg-[#7f654f]/30" />
-        <span className="steam absolute left-10 top-2 h-10 w-4 rounded-full border-l border-[#fff4df]/65 [animation-delay:.2s]" />
-        <span className="steam absolute left-14 top-0 h-12 w-5 rounded-full border-l border-[#fff4df]/50 [animation-delay:1s]" />
-        <span className="steam absolute left-8 top-1 h-11 w-5 rounded-full border-l border-[#fff4df]/45 [animation-delay:1.8s]" />
-      </div>
-
-      <div className="absolute right-[7%] top-[116px] z-40 w-60 rounded-[1.5rem] bg-[#f7e6cc]/92 p-4 text-[#2f251f] shadow-soft ring-1 ring-white/60 float-slow" style={{ "--r": "7deg" } as CSSProperties}>
-        <span className="absolute -top-2 right-10 h-5 w-14 rotate-[-8deg] rounded-sm bg-[#f8dfb8]/62" />
-        <p className="text-[10px] uppercase tracking-[0.24em] text-[#7f654f]">Paris-based · open to Spain / Europe</p>
-        <div className="relative mt-4 h-24 rounded-2xl bg-[#4c6683]/12 paper-grid">
-          <span className="absolute left-4 top-3 text-[9px] text-[#7f654f]/70">Paris</span>
-          <span className="absolute right-5 top-3 text-[9px] text-[#7f654f]/70">Madrid</span>
-          <span className="absolute bottom-3 right-12 text-[9px] text-[#7f654f]/70">Portugal</span>
-          <span className="absolute left-9 top-12 h-2 w-2 rounded-full bg-[#253b56]" />
-          <span className="absolute right-11 top-7 h-2 w-2 rounded-full bg-[#e2a75e]" />
-          <span className="absolute bottom-7 right-20 h-2 w-2 rounded-full bg-[#7f654f]" />
-          <div className="signal-line absolute left-11 top-12 h-px w-32 rotate-[-15deg] bg-[#253b56]/35" />
-          <div className="signal-line absolute right-12 top-10 h-px w-20 rotate-[42deg] bg-[#253b56]/25 [animation-delay:1.1s]" />
-        </div>
-        <p className="mt-3 text-[10px] leading-4 text-[#5e4738]/76">FR / EN / ES · international product, ops and data roles.</p>
-      </div>
-
-      <div className="hover-lift absolute bottom-[80px] right-[20%] z-40 hidden w-28 rotate-[-5deg] rounded-sm bg-[#fff7e7] p-2 shadow-paper ring-1 ring-white/70 md:block" style={{ "--hover-r": "-2deg" } as CSSProperties}>
-        <div className="grid h-20 place-items-center rounded-sm bg-[linear-gradient(135deg,#f0a45e,#718eae)]">
-          <svg className="h-12 w-12 text-[#2f251f]/70" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-            <path d="M10 30c6-14 15-15 25-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            <path d="M18 28c2 6 7 9 14 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            <path d="M29 20c3-5 6-7 9-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            <circle cx="35" cy="18" r="1.5" fill="currentColor" />
-          </svg>
-        </div>
-        <p className="mt-2 text-center text-[9px] text-[#7f654f]">sunset field note</p>
-      </div>
-
-      <div className="absolute bottom-[64px] left-[21%] z-20 h-24 w-24 rounded-full border border-[#f3c88c]/32 opacity-70">
-        <div className="h-full w-full rounded-full border border-[#7f654f]/18" />
-      </div>
-      <div className="absolute bottom-[76px] left-[31%] z-40 rotate-[-8deg] rounded-xl bg-[#fff6df]/92 px-3 py-2 text-[10px] text-[#7f654f] shadow-paper">
-        clarity leaves traces · 𓆈
-      </div>
-      <div className="absolute left-[42%] bottom-[38px] z-40 h-2 w-2 rounded-full bg-[#fff6df]/80 shadow-[0_0_18px_rgba(255,246,223,.65)]" />
-    </div>
-  );
-}
-
 export function Hero() {
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [glow, setGlow] = useState({ x: 50, y: 38 });
+  const [parallax, setParallax] = useState({ x: 0, y: 0 });
 
   function onMove(event: MouseEvent<HTMLElement>) {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
     const rect = event.currentTarget.getBoundingClientRect();
-    setTilt({
-      x: ((event.clientX - rect.left) / rect.width - 0.5) * 3.2,
-      y: ((event.clientY - rect.top) / rect.height - 0.5) * -2.4
-    });
-    setGlow({
-      x: ((event.clientX - rect.left) / rect.width) * 100,
-      y: ((event.clientY - rect.top) / rect.height) * 100
+    setParallax({
+      x: ((event.clientX - rect.left) / rect.width - 0.5) * 12,
+      y: ((event.clientY - rect.top) / rect.height - 0.5) * 10
     });
   }
 
   return (
-    <section
-      id="top"
-      className="relative min-h-[calc(100svh-4rem)] overflow-hidden bg-[#436985] text-white"
-      onMouseMove={onMove}
-      onMouseLeave={() => {
-        setTilt({ x: 0, y: 0 });
-        setGlow({ x: 50, y: 38 });
-      }}
-    >
-      <ObservatorySky glow={glow} />
-      <div
-        className="pointer-events-none absolute h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#fff0cc]/12 blur-3xl transition-all duration-700"
-        style={{ left: `${glow.x}%`, top: `${glow.y}%` }}
-      />
+    <section id="top" className="relative overflow-hidden bg-[#274866] pb-16 pt-3 text-white md:pb-20 md:pt-3" onMouseMove={onMove} onMouseLeave={() => setParallax({ x: 0, y: 0 })}>
+      <HeroAtmosphere />
 
-      <div className="cinematic-shell relative z-20 flex min-h-[calc(100svh-4rem)] flex-col justify-center pb-12 pt-16 md:pb-16 md:pt-20">
-        <div className="mx-auto w-full max-w-6xl">
-          <div className="relative z-30 max-w-4xl">
-            <p className="text-xs uppercase tracking-[0.36em] text-[#fff0cc]/80">Shana Bhojwani · Business Analyst · Product Operations</p>
-            <h1 className="mt-5 max-w-4xl font-display font-semibold leading-[0.96] tracking-tight text-[#fff9ed]" style={{ fontSize: "clamp(2.55rem, min(4.8vw, 7.8dvh), 4.95rem)" }}>
-              Turning messy systems into calmer workflows.
-            </h1>
-            <p className="mt-5 max-w-2xl text-lg font-medium text-[#fff4da]/86 md:text-xl">
-              Business Analyst · Product Operations · CRM, data and workflow clarity
-            </p>
-          </div>
+      <div className="cinematic-shell relative z-20">
+        <div className="relative mx-auto max-w-[1500px]">
+          <Laptop />
+          <WorkspaceObjects parallax={parallax} />
+        </div>
 
-          <DeskScene tilt={tilt} />
-
-          <div className="relative z-30 -mt-4 grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
-            <div>
-              <p className="max-w-2xl text-base leading-7 text-[#fff8ec]/78 md:text-lg">{portfolioData.person.identity}</p>
-              <p className="mt-3 text-sm text-[#fff0cc]/78">{portfolioData.person.meta}</p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Button asChild><a href="#work">View selected work <ArrowRight className="h-4 w-4" /></a></Button>
-              <Button asChild variant="secondary"><a href={portfolioData.person.cv} onClick={() => trackEvent("cv_download_click", "hero")}><FileText className="h-4 w-4" /> Download CV</a></Button>
-              <Button asChild variant="ghost"><a className="text-[#fff9ed] hover:bg-white/10" href="#contact"><Mail className="h-4 w-4" /> Contact</a></Button>
-            </div>
-          </div>
-
-          <div className="relative z-30 mt-8 flex flex-wrap gap-6 text-[11px] uppercase tracking-[0.24em] text-[#fff0cc]/54">
-            <span>late evening systems thinking</span>
-            <span>visual thinking</span>
-            <span>small systems, useful outcomes</span>
+        <div className="mx-auto mt-7 flex max-w-[1120px] flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <p className="text-[10px] uppercase tracking-[0.22em] text-[#fff0cc]/52">visual thinking · calm systems · useful outcomes</p>
+          <div className="flex flex-wrap gap-2">
+            <Button asChild><a href="#work">View work <ArrowRight className="h-4 w-4" /></a></Button>
+            <Button asChild variant="secondary"><a href={portfolioData.person.cv} onClick={() => trackEvent("cv_download_click", "hero")}><FileText className="h-4 w-4" /> CV</a></Button>
+            <Button asChild variant="ghost"><a className="text-[#fff9ed] hover:bg-white/10" href="#contact"><Mail className="h-4 w-4" /> Contact</a></Button>
           </div>
         </div>
       </div>
