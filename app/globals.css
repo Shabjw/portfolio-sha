@@ -140,6 +140,10 @@ body::after {
   animation: thinking-flow 1.8s linear infinite;
 }
 
+.quote-fade {
+  animation: quote-fade 520ms ease both;
+}
+
 .hover-lift {
   transition: transform 500ms ease, box-shadow 500ms ease;
 }
@@ -203,6 +207,11 @@ body::after {
 
 @keyframes thinking-flow {
   to { stroke-dashoffset: -28; }
+}
+
+@keyframes quote-fade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
