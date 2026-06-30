@@ -135,9 +135,9 @@ body::after {
 }
 
 .thinking-path-active {
-  stroke-dasharray: 8 6;
+  stroke-dasharray: 10 7;
   filter: drop-shadow(0 0 3px rgba(183, 121, 84, 0.45));
-  animation: thinking-flow 1.8s linear infinite;
+  animation: thinking-flow 2.2s linear infinite;
 }
 
 .quote-fade {

@@ -91,14 +91,27 @@ export const portfolioData = {
   ],
   otherProjects: ["Power BI Dashboard", "Jukebox Product Discovery", "McDonald’s Kiosk SI Project", "WaveGame Wavestone"],
   exploring: [
-    "Power BI storytelling",
-    "AI productivity workflows",
-    "Product analytics",
-    "CRM/data ops",
-    "Documentation systems",
-    "International product/ops roles",
-    "Visual systems",
-    "Cafe work sessions"
+    {
+      title: "AI automation & Codex projects",
+      reflection: "Recently I've been building small tools to automate everyday problems. Mostly because I enjoy making life slightly easier. The fun part isn't replacing people. It's removing repetitive work so they can focus on more interesting things."
+    },
+    {
+      title: "Product Thinking",
+      reflection: "I don't think about product only as a job title. I just notice it everywhere now. Sometimes I use an app and immediately wonder why it feels intuitive, why one feature works, or what could make it simpler. I also like brainstorming slightly ridiculous future product ideas with friends. Most of them will probably never exist, but they are fun because they make us rethink what is possible."
+    },
+    {
+      title: "Different cultures",
+      reflection: "Travelling made me notice that people often solve the same problem in completely different ways. In Korea, for example, you can press an elevator button again to cancel the wrong floor. Tiny detail, huge relief. I love noticing small decisions like that and wondering who thought of them first."
+    },
+    {
+      title: "Investing",
+      reflection: "Recently I've been learning more about long-term investing and option strategies. What I enjoy isn't chasing quick returns. It's understanding how small decisions compound over time. In a way, investing feels surprisingly similar to building good systems."
+    }
+  ],
+  noticing: [
+    "Good products usually remove decisions.",
+    "Most people are not confused because they are incapable. They are missing one piece of information.",
+    "The first request is rarely the whole story."
   ],
   languages: ["French native / C2", "English fluent / C2 - TOEIC 945", "Spanish professional / C1", "Italian A2", "Hindi A2"]
 };
