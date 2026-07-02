@@ -13,6 +13,8 @@ export function Header() {
         </a>
         <a
           href={portfolioData.person.cv}
+          target="_blank"
+          rel="noopener noreferrer"
           onClick={() => trackEvent("cv_download_click", "header")}
           className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-sm shadow-paper ring-1 ring-border transition-all hover:-translate-y-0.5"
         >

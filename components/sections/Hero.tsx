@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState, type MouseEvent } from "react";
-import { ArrowRight, Brain, Clock3, FileText, Lightbulb, Mail, Map, Network, Search, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, Brain, Clock3, FileText, Lightbulb, Mail, Map, MousePointer2, Network, Search, Sparkles, Zap } from "lucide-react";
 import coffeeImage from "@/image/coffee.png";
 import dinoImage from "@/image/dino.png";
 import worldmapImage from "@/image/worldmap.png";
@@ -20,35 +20,35 @@ const thinkingNodes = [
     label: "What are people trying to do?",
     story: "Before thinking about a solution, I try to understand what people are really trying to achieve.",
     icon: Search,
-    className: "left-[5%] top-[8%] max-w-[13.5rem]"
+    className: "left-[5%] top-[9%] w-[14rem]"
   },
   {
     id: "friction",
     label: "What is making it harder?",
     story: "I look for friction: unclear ownership, scattered information, repeated questions, or tools that do not match how people work.",
     icon: Zap,
-    className: "left-[23%] top-[42%] max-w-[12.5rem]"
+    className: "left-[23%] top-[47%] w-[13.5rem]"
   },
   {
     id: "missing",
     label: "What is missing?",
     story: "Sometimes the real problem is not the process. It is that people do not share the same context.",
     icon: Brain,
-    className: "left-[43%] top-[12%] max-w-[12rem]"
+    className: "left-[43%] top-[9%] w-[11.5rem]"
   },
   {
     id: "clearer",
     label: "What would make this clearer?",
     story: "I like turning messy inputs into something people can read, follow and act on.",
     icon: Lightbulb,
-    className: "right-[4%] top-[40%] max-w-[12.5rem]"
+    className: "right-[4%] top-[47%] w-[14rem]"
   },
   {
     id: "decide",
     label: "Now we can decide.",
     story: "The goal is not more dashboards or documentation. The goal is better decisions.",
     icon: Sparkles,
-    className: "left-[43%] bottom-[8%] max-w-[12rem]"
+    className: "left-[calc(43%+10px)] bottom-[1%] w-[12rem]"
   }
 ];
 
@@ -58,7 +58,7 @@ const memoryCards = [
   {
     title: "CRM & Workflow Optimization",
     visible: "Follow-up was scattered.",
-    line: "scattered → visible",
+    line: "Follow-up scattered → follow-up visible",
     result: "Clearer follow-up visibility.",
     icon: Network,
     href: "#work",
@@ -66,7 +66,7 @@ const memoryCards = [
       ["Situation", "Follow-up information was scattered across conversations and tools."],
       ["What I noticed", "People were not forgetting tasks. They could not easily see what needed attention."],
       ["What I changed", "I helped structure CRM pipelines, segmentation and follow-up logic."],
-      ["What changed", "The next action became easier to spot and team coordination improved."]
+      ["Outcome", "The next action became easier to spot, so team coordination felt calmer."]
     ]
   },
   {
@@ -80,13 +80,13 @@ const memoryCards = [
       ["Situation", "A manual preparation process was repetitive and error-prone."],
       ["What I noticed", "The same steps were being repeated every time."],
       ["What I changed", "I built a VBA automation to clean, check and prepare the file."],
-      ["What changed", "The process became faster, cleaner and easier to repeat."]
+      ["Outcome", "The process became faster, cleaner and easier to repeat."]
     ]
   },
   {
     title: "Local Authorities Offer",
     visible: "Partner needs repeated.",
-    line: "specific needs → patterns → clearer offer",
+    line: "Different requests → one clearer offer",
     result: "Easier to explain and reuse.",
     icon: Map,
     href: "#work",
@@ -94,7 +94,7 @@ const memoryCards = [
       ["Situation", "Local authority requests looked different at first, but many needs were recurring."],
       ["What I noticed", "The team needed a way to see patterns instead of treating every request separately."],
       ["What I changed", "I worked with workshops, feedback loops and dashboards to structure the offer."],
-      ["What changed", "The offer became easier to explain, reuse and improve."]
+      ["Outcome", "The offer became easier to explain, reuse and improve."]
     ]
   }
 ];
@@ -124,7 +124,7 @@ const curiosityTopics = [
   },
   {
     title: "Better everyday systems",
-    shortTitle: "Everyday",
+    shortTitle: "Systems",
     cleanNote: "I like small systems that make daily life easier: a clearer routine, a useful dashboard, a smoother handoff, or a better way to track something.",
     note: "I like small systems that make daily life easier: a clearer routine, a useful dashboard, a better way to track something, a smoother handoff."
   },
@@ -144,8 +144,8 @@ const observations = [
   },
   {
     label: "Observation 02",
-    line: "People do not always need more information. They need the right information at the right moment.",
-    detail: "The useful part is often deciding what should be visible, when, and for whom.",
+    line: "People need the right information at the right moment.",
+    detail: "Often, they do not need more information. They need to know what should be visible, when, and for whom.",
     icon: Brain
   },
   {
@@ -222,18 +222,13 @@ function ThinkingMap() {
       <div className="flex items-center justify-between gap-3">
         <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8c684e]">How I think</p>
       </div>
-      <div className="relative mt-1.5 h-[10.45rem] [@media(max-height:800px)]:h-[8.4rem]">
+      <div className="relative mt-1.5 h-[8.45rem] [@media(max-height:800px)]:h-[7.2rem]">
         <svg className="absolute inset-0 h-full w-full" viewBox="0 0 760 200" fill="none" aria-hidden="true">
-          <defs>
-            <marker id="thinking-arrow" markerHeight="8" markerWidth="8" orient="auto" refX="7" refY="4">
-              <path d="M1 1 L7 4 L1 7" fill="none" stroke="#8f715d" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" />
-            </marker>
-          </defs>
           {[
-            ["people", "friction", "M225 65 C248 78 266 88 292 101"],
-            ["friction", "missing", "M345 103 C372 83 403 70 438 63"],
-            ["missing", "clearer", "M558 66 C590 84 614 101 642 118"],
-            ["clearer", "decide", "M632 146 C578 166 505 171 438 164"]
+            ["people", "friction", "M165 62 C164 82 174 99 182 105"],
+            ["friction", "missing", "M309 86 C340 62 389 56 431 62"],
+            ["missing", "clearer", "M535 43 C588 36 660 48 603 82"],
+            ["decide", "clearer", "M544 157 C606 158 656 142 603 120"]
           ].map(([from, to, d], index) => {
             const isActive = index <= activeIndex - 1 || pathOrder.indexOf(from) === activeIndex;
             return (
@@ -243,14 +238,13 @@ function ThinkingMap() {
                 stroke="#8f715d"
                 strokeLinecap="round"
                 strokeWidth={isActive ? 2.45 : 1.5}
-                markerEnd="url(#thinking-arrow)"
-                className={`transition duration-300 ${isActive ? "opacity-85 thinking-path-active" : "opacity-28"}`}
+                className={`thinking-path-active transition duration-300 ${isActive ? "opacity-85" : "opacity-40"}`}
               />
             );
           })}
         </svg>
-        <span className="absolute left-[21%] top-[51%] rotate-[-8deg] font-serif text-[11px] italic text-[#a56d4a]/65">less noise</span>
-        <span className="absolute right-[9%] top-[29%] rotate-[5deg] font-serif text-[11px] italic text-[#a56d4a]/65">make it useful</span>
+        <span className="absolute left-[19%] top-[55%] z-20 rotate-[-8deg] rounded-full bg-[#fff8eb]/70 px-1.5 font-serif text-[11px] italic text-[#a56d4a]/75">less noise</span>
+        <span className="absolute right-[9%] top-[26%] z-20 rotate-[5deg] rounded-full bg-[#fff8eb]/70 px-1.5 font-serif text-[11px] italic text-[#a56d4a]/75">make it useful</span>
 
         {thinkingNodes.map((node) => {
           const isActive = node.id === activeNode;
@@ -262,15 +256,15 @@ function ThinkingMap() {
               onMouseEnter={() => setActiveNode(node.id)}
               onFocus={() => setActiveNode(node.id)}
               onClick={goToThinking}
-              className={`absolute z-10 flex items-start gap-1.5 rounded-[1rem] border px-3.5 py-2 text-left text-[12.5px] font-semibold leading-[1.08] shadow-[0_14px_35px_rgba(47,39,31,.08)] transition duration-300 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b77954]/45 ${node.className} ${isActive ? "border-[#b77954]/45 bg-white text-[#20354d] shadow-[0_18px_45px_rgba(183,121,84,.16)]" : "border-[#283b53]/10 bg-[#fffaf0] text-[#506074]"}`}
+              className={`absolute z-10 flex items-center justify-center gap-1.5 rounded-[1rem] border px-3.5 py-1.5 text-center text-[12.5px] font-semibold leading-[1.08] shadow-[0_14px_35px_rgba(47,39,31,.08)] transition duration-300 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b77954]/45 ${node.className} ${isActive ? "border-[#b77954]/45 bg-white text-[#20354d] shadow-[0_18px_45px_rgba(183,121,84,.16)]" : "border-[#283b53]/10 bg-[#fffaf0] text-[#506074]"}`}
             >
-              <Icon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#a56d4a]" strokeWidth={1.8} />
-              <span>{node.label}</span>
+              <Icon className="h-3.5 w-3.5 shrink-0 text-[#a56d4a]" strokeWidth={1.8} />
+              <span className="whitespace-nowrap">{node.label}</span>
             </button>
           );
         })}
       </div>
-      <div className="mx-auto min-h-[4rem] max-w-[47rem] rounded-[1rem] border-l-2 border-[#c7865c]/55 bg-white/72 px-4 py-2.5 text-center text-[clamp(.88rem,.96vw,.98rem)] font-medium leading-5 text-[#425163] shadow-[0_14px_32px_rgba(47,39,31,.06),inset_0_0_0_1px_rgba(45,39,32,.05)] [@media(max-height:800px)]:min-h-[2.8rem] [@media(max-height:800px)]:py-1.5">
+      <div className="mx-auto min-h-[2.85rem] max-w-[47rem] rounded-[1rem] border-l-2 border-[#c7865c]/55 bg-white/72 px-4 py-1.5 text-center text-[clamp(.84rem,.92vw,.94rem)] font-medium leading-5 text-[#425163] shadow-[0_14px_32px_rgba(47,39,31,.06),inset_0_0_0_1px_rgba(45,39,32,.05)] [@media(max-height:800px)]:min-h-[2.35rem] [@media(max-height:800px)]:py-1.5">
         {activeStory}
       </div>
     </section>
@@ -288,7 +282,7 @@ function MemoryCards() {
           <a
             key={card.title}
             href={card.href}
-          className="group relative min-h-[7.25rem] overflow-hidden rounded-[1.05rem] bg-[#fffaf0]/74 p-3.5 text-[#243850] shadow-[0_18px_45px_rgba(47,39,31,.08)] ring-1 ring-[#463629]/6 transition duration-300 hover:z-30 hover:-translate-y-1 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b77954]/45 [@media(max-height:800px)]:min-h-[5.25rem] [@media(max-height:800px)]:p-2.5"
+          className="group relative min-h-[9.4rem] overflow-visible rounded-[1.05rem] bg-[#fffaf0]/80 p-4 text-[#243850] shadow-[0_18px_45px_rgba(47,39,31,.08)] ring-1 ring-[#463629]/8 transition duration-300 hover:z-30 hover:-translate-y-1 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b77954]/45 [@media(max-height:800px)]:min-h-[6.45rem] [@media(max-height:800px)]:p-2.5"
           >
             <span className="absolute -top-2 left-5 h-4 w-14 rotate-[-2deg] bg-[#f1cf9b]/70 shadow-sm" />
             <div className="transition duration-300 group-hover:-translate-y-2 group-hover:opacity-0">
@@ -296,15 +290,24 @@ function MemoryCards() {
                 <Icon className="h-3.5 w-3.5 text-[#a56d4a]" strokeWidth={1.8} />
                 <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#a56d4a]">case 0{index + 1}</p>
               </div>
-              <p className="mt-1 text-[13px] font-semibold leading-4">{card.title}</p>
-              <p className="mt-1.5 text-[11.5px] leading-4 text-[#596371] [@media(max-height:800px)]:hidden">{card.visible}</p>
-              <p className="mt-1.5 font-serif text-[13px] italic leading-4 text-[#8c684e]">{card.line}</p>
-              <p className="mt-2 inline-flex rounded-full bg-[#f3d6a3]/55 px-2.5 py-1 text-[13px] font-bold leading-4 text-[#243850]">{card.result}</p>
+              <p className="mt-2.5 text-[16px] font-semibold leading-5">{card.title}</p>
+              <div className="mt-3">
+                <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-[#a56d4a]/75">Situation</p>
+                <p className="mt-1 text-[13.5px] leading-5 text-[#4f5c6b] [@media(max-height:800px)]:hidden">{card.visible}</p>
+              </div>
+              <p className="mt-2.5 font-serif text-[13px] italic leading-5 text-[#8c684e]">{card.line}</p>
+              <div className="mt-3 text-center">
+                <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-[#a56d4a]/75">Result</p>
+                <p className="mt-1 inline-flex rounded-full bg-[#f0c987]/80 px-3 py-1.5 text-[11px] font-extrabold leading-5 text-[#243850] shadow-[0_8px_18px_rgba(160,103,61,.12)]">{card.result}</p>
+              </div>
             </div>
-            <div className="absolute inset-0 translate-y-3 bg-[#243850] p-3.5 text-white opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
-              <div className="space-y-1 text-[10.5px] leading-[1.25rem]">
+            <div className="absolute inset-x-0 top-0 z-40 min-h-full translate-y-3 rounded-[1.05rem] bg-[#243850] p-4 text-white opacity-0 shadow-[0_24px_70px_rgba(20,35,56,.24)] transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 [@media(max-height:800px)]:p-3">
+              <div className="space-y-1 text-[11.5px] leading-[1.22rem] [@media(max-height:800px)]:space-y-1 [@media(max-height:800px)]:text-[10.8px] [@media(max-height:800px)]:leading-[1.1rem]">
                 {card.details.map(([label, detail]) => (
-                  <p key={label}><span className="font-semibold text-[#f5c98d]">{label}:</span> {detail}</p>
+                  <p key={label}>
+                    <span className="block text-[9.5px] font-semibold uppercase tracking-[0.16em] text-[#f5c98d]">{label}</span>
+                    <span className="block text-white/86">{detail}</span>
+                  </p>
                 ))}
               </div>
             </div>
@@ -341,8 +344,18 @@ function CuriosityStrip() {
             ))}
           </div>
         </div>
-        <p className="h-[3.45rem] min-w-[17rem] flex-1 overflow-hidden rounded-[.9rem] bg-white/60 px-3 py-1.5 text-[clamp(.68rem,.72vw,.76rem)] leading-[1.05rem] text-[#4e5966] shadow-[inset_0_0_0_1px_rgba(45,39,32,.05)]">
-          {active ? ("cleanNote" in active ? active.cleanNote : active.note) : defaultNote}
+        <p className="flex h-[3.45rem] min-w-[17rem] flex-1 items-center overflow-hidden rounded-[.9rem] bg-white/60 px-3 py-1.5 text-[clamp(.68rem,.72vw,.76rem)] leading-[1.05rem] text-[#4e5966] shadow-[inset_0_0_0_1px_rgba(45,39,32,.05)]">
+          {active ? (
+            "cleanNote" in active ? active.cleanNote : active.note
+          ) : (
+            <span>
+              {defaultNote}
+              <span className="mt-0.5 flex items-center gap-1 text-[10px] text-[#7a8390]">
+                <MousePointer2 className="h-3 w-3" strokeWidth={1.8} />
+                Click a chip to see more.
+              </span>
+            </span>
+          )}
         </p>
       </div>
     </section>
@@ -351,7 +364,6 @@ function CuriosityStrip() {
 
 function ObservationPanel() {
   const [activeObservation, setActiveObservation] = useState(0);
-  const active = observations[activeObservation];
 
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -361,9 +373,9 @@ function ObservationPanel() {
   }, []);
 
   return (
-    <aside className="relative hidden h-full rounded-[1.25rem] bg-[#fff8eb]/45 p-4 shadow-[inset_0_0_0_1px_rgba(45,39,32,.07)] md:flex md:flex-col">
+    <aside className="relative hidden h-[18.3rem] overflow-hidden rounded-[1.25rem] bg-[#fff8eb]/45 p-4 shadow-[inset_0_0_0_1px_rgba(45,39,32,.07)] md:block [@media(max-height:800px)]:h-[15.8rem]">
       <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8c684e]">Things I naturally notice</p>
-      <div className="mt-3 grid gap-2">
+      <div className="mt-2 flex h-[calc(100%-1.35rem)] flex-col gap-1.5">
         {observations.map((observation, index) => {
           const isActive = activeObservation === index;
           const Icon = observation.icon;
@@ -374,19 +386,27 @@ function ObservationPanel() {
               onMouseEnter={() => setActiveObservation(index)}
               onFocus={() => setActiveObservation(index)}
               onClick={() => setActiveObservation(index)}
-              className={`min-h-[4rem] w-full rounded-[.95rem] px-3 py-2 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b77954]/45 ${isActive ? "bg-white/82 text-[#243850] shadow-paper" : "text-[#526073] hover:bg-white/45"}`}
+              className={`w-full overflow-hidden rounded-[.95rem] px-3 py-2 text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b77954]/45 ${
+                isActive
+                  ? "h-[7.05rem] bg-white/82 text-[#243850] shadow-paper [@media(max-height:800px)]:h-[5.95rem]"
+                  : "h-[3.45rem] text-[#526073] hover:bg-white/45 [@media(max-height:800px)]:h-[3.05rem]"
+              }`}
             >
               <span className="flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.18em] text-[#a56d4a]">
                 <Icon className="h-3.5 w-3.5" strokeWidth={1.8} />
                 {observation.label}
               </span>
-              <span className="mt-1 block text-[clamp(.78rem,.84vw,.88rem)] font-semibold leading-5">{observation.line}</span>
+              <span className="mt-1 block text-[clamp(.74rem,.8vw,.84rem)] font-semibold leading-[1.08rem]">{observation.line}</span>
+              <span
+                className={`block overflow-hidden text-[11px] leading-[1.05rem] text-[#6a6270] transition-all duration-300 ${
+                  isActive ? "mt-1 max-h-20 translate-y-0 opacity-100" : "max-h-0 -translate-y-1 opacity-0"
+                }`}
+              >
+                {observation.detail}
+              </span>
             </button>
           );
         })}
-      </div>
-      <div className="mt-2.5 h-[3.75rem] rounded-[.9rem] bg-white/55 px-3 py-2 text-[12px] leading-5 text-[#6a6270] shadow-[inset_0_0_0_1px_rgba(45,39,32,.05)]">
-        {active.detail}
       </div>
     </aside>
   );
@@ -441,41 +461,41 @@ function WorkspaceObjects({ parallax }: { parallax: { x: number; y: number } }) 
 
   return (
     <>
-      <div className="absolute -left-[3.25%] bottom-[2.5%] z-40 hidden w-[clamp(8.2rem,8.6vw,10.5rem)] xl:block 2xl:-left-[5%]" style={{ transform: `translate3d(${parallax.x * -0.7}px, ${parallax.y * -0.5}px, 0)` }}>
+      <div className="absolute left-[calc(12px_-_160px)] bottom-[calc(3.8%_-_35px)] z-40 hidden w-[clamp(9.6rem,9.7vw,12rem)] xl:block 2xl:left-[calc(28px_-_160px)]" style={{ transform: `translate3d(${parallax.x * -0.7}px, ${parallax.y * -0.5}px, 0)` }}>
         <div className="coffee-object group relative transition-transform duration-500 hover:scale-[1.03]">
           <Image src={coffeeImage} alt="Hand-drawn cup of coffee" className="h-auto w-full drop-shadow-[0_22px_30px_rgba(47,31,25,.28)]" priority />
           <span className="steam absolute left-[47%] top-[1%] h-16 w-6 rounded-full border-l border-[#fff3dc]/55 [animation-delay:.5s]" />
           <span className="steam absolute left-[57%] top-[-3%] h-20 w-8 rounded-full border-l border-[#fff3dc]/40 [animation-delay:1.4s]" />
-          <div className="pointer-events-none absolute left-[62%] top-[96%] w-60 translate-x-2 translate-y-2 rounded-xl bg-[#fff4df]/95 p-3 text-[12px] leading-5 text-[#5f493b] opacity-0 shadow-paper transition duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="pointer-events-none absolute left-[62%] top-[calc(96%-3px)] w-60 translate-x-2 translate-y-2 rounded-xl bg-[#fff4df]/95 p-3 text-[12px] leading-5 text-[#5f493b] opacity-0 shadow-paper transition duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100">
             Coffee is not really the point. The atmosphere is. I think better in places that help me slow down.
           </div>
         </div>
       </div>
 
-      <div className="group absolute -right-[4.25%] bottom-[30%] z-40 hidden w-[clamp(5.6rem,5.5vw,6.8rem)] xl:block 2xl:-right-[5.5%]" style={{ transform: `translate3d(${parallax.x * 0.65}px, ${parallax.y * 0.45}px, 0) rotate(4deg)`, perspective: "800px" }}>
+      <div className="group absolute right-[calc(1.3%_-_160px)] bottom-[29.5%] z-40 hidden w-[clamp(8.2rem,7.85vw,10.2rem)] xl:block 2xl:right-[calc(2.4%_-_160px)]" style={{ transform: `translate3d(${parallax.x * 0.65}px, ${parallax.y * 0.45}px, 0) rotate(4deg)`, perspective: "800px" }}>
         <div className="relative aspect-[354/376] w-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
           <div className="absolute inset-0 [backface-visibility:hidden]">
             <Image src={dinoImage} alt="Instax-style sunset memory with a small dinosaur playing badminton" className="h-auto w-full drop-shadow-[0_26px_35px_rgba(37,29,28,.3)]" priority />
           </div>
-          <div className="absolute inset-x-4 inset-y-6 grid place-items-center rounded-sm bg-[#fff1d3] p-2.5 text-center text-[13px] leading-5 text-[#5f493b] shadow-paper [backface-visibility:hidden] [transform:rotateY(180deg)]">
-            <p>A small personal detail: dinosaurs, badminton, sunsets, and a quiet beach would probably make a good day.</p>
+          <div className="absolute inset-0 grid place-items-center rounded-sm bg-[#fff1d3] p-3 text-center text-[11px] leading-[0.92rem] text-[#5f493b] shadow-paper [backface-visibility:hidden] [transform:rotateY(180deg)]">
+            <p>A random thought: Playing badminton at sunset on a quiet beach would probably make a pretty good day. Dinosaurs are optional.</p>
           </div>
         </div>
       </div>
 
-      <div className="absolute -right-[4%] top-[6%] z-40 hidden w-[clamp(7.25rem,7vw,9.5rem)] opacity-95 xl:block 2xl:-right-[6%]" style={{ transform: `translate3d(${parallax.x * 0.28}px, ${parallax.y * 0.22}px, 0) rotate(1deg)` }}>
+      <div className="absolute right-[calc(1.1%_-_170px)] top-[4.6%] z-40 hidden w-[clamp(12.2rem,11.8vw,16.05rem)] opacity-95 xl:block 2xl:right-[calc(2.2%_-_170px)]" style={{ transform: `translate3d(${parallax.x * 0.28}px, ${parallax.y * 0.22}px, 0) rotate(1deg)` }}>
         <div className="travel-note group relative transition-transform duration-700 hover:rotate-[-2deg] hover:scale-[1.02]">
           <span className="absolute left-[55%] top-2 z-10 h-4 w-16 -translate-x-1/2 rotate-[3deg] bg-[#f6d6a5]/82 shadow-paper" />
           <div className="relative rounded-sm drop-shadow-[0_20px_34px_rgba(37,29,28,.2)]">
             <Image src={worldmapImage} alt="Travel sketch connecting Paris, Tenerife and Seoul" className="h-auto w-full" priority />
           </div>
-          <div className="pointer-events-none absolute -bottom-20 right-0 w-60 translate-y-2 rounded-xl bg-[#fff4df]/95 p-3 text-[12px] leading-5 text-[#5f493b] opacity-0 shadow-paper transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="pointer-events-none absolute bottom-[calc(100%_+_8px)] right-8 w-60 translate-y-2 rounded-xl bg-[#fff4df]/95 p-3 text-[12px] leading-5 text-[#5f493b] opacity-0 shadow-paper transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
             Travelling made me notice how differently people solve the same everyday problems.
           </div>
         </div>
       </div>
 
-      <div className="group absolute left-[.5%] top-[25%] z-40 hidden aspect-square w-[clamp(5.4rem,5.2vw,6.6rem)] -rotate-[3deg] place-items-center rounded-sm bg-[#ffe6a9] p-3 text-center text-[#4c382d] shadow-[0_22px_46px_rgba(50,35,29,.22)] ring-1 ring-white/55 xl:grid 2xl:-left-[2.5%]">
+      <div className="group absolute left-[calc(18px_-_135px)] top-[25%] z-40 hidden aspect-square w-[clamp(5.4rem,5.2vw,6.6rem)] -rotate-[3deg] place-items-center rounded-sm bg-[#ffe6a9] p-3 text-center text-[#4c382d] shadow-[0_22px_46px_rgba(50,35,29,.22)] ring-1 ring-white/55 xl:grid 2xl:left-[calc(40px_-_135px)]">
         <span className="absolute -top-3 right-6 h-6 w-16 rotate-[7deg] bg-[#f6d6a5]/78 shadow-paper" />
         <p className="font-serif text-[15px] italic leading-5">{postItText}</p>
         <span className="pointer-events-none absolute left-full top-1/2 ml-3 w-56 -translate-y-1/2 rounded-xl bg-[#fff4df]/95 p-3 text-left text-[12px] leading-5 text-[#5f493b] opacity-0 shadow-paper transition duration-300 group-hover:opacity-100">
@@ -515,10 +535,10 @@ export function Hero() {
         </div>
 
         <div className="mx-auto mt-0 flex max-w-[1120px] flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <p className="text-[10px] uppercase tracking-[0.22em] text-[#fff0cc]/52">visual thinking · calm systems · useful outcomes</p>
-          <div className="flex flex-wrap gap-2">
-            <Button asChild><a href="#work">View work <ArrowRight className="h-4 w-4" /></a></Button>
-            <Button asChild variant="secondary"><a href={portfolioData.person.cv} onClick={() => trackEvent("cv_download_click", "hero")}><FileText className="h-4 w-4" /> CV</a></Button>
+          <p className="text-[10px] uppercase tracking-[0.22em] text-[#fff0cc]/72">visual thinking · calm systems · useful outcomes</p>
+          <div className="translate-y-0.5 flex flex-wrap gap-2">
+            <Button asChild className="h-9 px-4 py-1.5"><a href="#work">View work <ArrowRight className="h-4 w-4" /></a></Button>
+            <Button asChild variant="secondary" className="h-9 px-4 py-1.5"><a href={portfolioData.person.cv} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("cv_download_click", "hero")}><FileText className="h-4 w-4" /> CV</a></Button>
             <Button asChild variant="ghost"><a className="text-[#fff9ed] hover:bg-white/10" href="#contact"><Mail className="h-4 w-4" /> Contact</a></Button>
           </div>
         </div>
@@ -526,3 +546,6 @@ export function Hero() {
     </section>
   );
 }
+
+
+

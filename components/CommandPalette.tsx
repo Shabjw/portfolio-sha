@@ -54,7 +54,7 @@ export function CommandPalette() {
               <button className="rounded-2xl p-3 text-left hover:bg-muted" type="button" onClick={copyEmail}>
                 <Copy className="mr-2 inline h-4 w-4" /> Copy email
               </button>
-              <a className="rounded-2xl p-3 hover:bg-muted" href={portfolioData.person.cv} onClick={() => trackEvent("cv_download_click", "command_palette")}>
+              <a className="rounded-2xl p-3 hover:bg-muted" href={portfolioData.person.cv} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("cv_download_click", "command_palette")}>
                 <Download className="mr-2 inline h-4 w-4" /> Download CV
               </a>
               <a className="rounded-2xl p-3 hover:bg-muted" href="#contact" onClick={() => setOpen(false)}>

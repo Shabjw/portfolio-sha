@@ -6,9 +6,9 @@ export const portfolioData = {
     identity: "I like turning messy information into something clear, useful and actionable for teams.",
     meta: "Based in Paris · Open to international roles · French / English / Spanish",
     email: "hello@shanabhojwani.com",
-    linkedin: "#",
+    linkedin: "https://www.linkedin.com/in/shana-bjw/",
     github: "#",
-    cv: "/Shana-Bhojwani-CV.pdf"
+    cv: "/CV/CV%20-%20Shana%20Bhojwani%20-%20Business%20Analyst.pdf"
   },
   thinking: [
     {
@@ -89,7 +89,7 @@ export const portfolioData = {
       learned: "AI is most useful when it supports a clear workflow rather than becoming the whole story."
     }
   ],
-  otherProjects: ["Power BI Dashboard", "Jukebox Product Discovery", "McDonald’s Kiosk SI Project", "WaveGame Wavestone"],
+  otherProjects: ["Power BI Dashboard", "Jukebox Product Discovery", "McDonald's Kiosk SI Project", "WaveGame Wavestone"],
   exploring: [
     {
       title: "AI automation & Codex projects",

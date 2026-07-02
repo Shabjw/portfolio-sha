@@ -1,8 +1,9 @@
 import { Footer } from "@/components/Footer";
-import { EndingScene } from "@/components/sections/EndingScene";
+import { ContactSection } from "@/components/sections/ContactSection";
 import { Hero } from "@/components/sections/Hero";
 import { ProjectGrid } from "@/components/sections/ProjectGrid";
 import { StoryStack } from "@/components/sections/StoryStack";
+import { ThingsOnMyMind } from "@/components/sections/ThingsOnMyMind";
 
 export default function Home() {
   return (
@@ -11,7 +12,8 @@ export default function Home() {
         <Hero />
         <StoryStack />
         <ProjectGrid />
-        <EndingScene />
+        <ThingsOnMyMind />
+        <ContactSection />
       </main>
       <Footer />
     </>
