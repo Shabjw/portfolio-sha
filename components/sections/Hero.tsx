@@ -225,12 +225,14 @@ function ThinkingMap() {
       <div className="relative mt-1.5 h-[8.45rem] [@media(max-height:800px)]:h-[7.2rem]">
         <svg className="absolute inset-0 h-full w-full" viewBox="0 0 760 200" fill="none" aria-hidden="true">
           {[
-            ["people", "friction", "M165 62 C164 82 174 99 182 105"],
-            ["friction", "missing", "M309 86 C340 62 389 56 431 62"],
-            ["missing", "clearer", "M535 43 C588 36 660 48 603 82"],
-            ["decide", "clearer", "M544 157 C606 158 656 142 603 120"]
-          ].map(([from, to, d], index) => {
-            const isActive = index <= activeIndex - 1 || pathOrder.indexOf(from) === activeIndex;
+            ["people", "friction", "M154 63 C172 82 198 95 225 100"],
+            ["friction", "missing", "M338 100 C368 82 405 68 449 63"],
+            ["missing", "clearer", "M522 63 C574 74 618 88 651 101"],
+            ["clearer", "decide", "M651 127 C617 145 576 155 529 155"]
+          ].map(([from, to, d]) => {
+            const fromIndex = pathOrder.indexOf(from);
+            const toIndex = pathOrder.indexOf(to);
+            const isActive = activeIndex >= Math.min(fromIndex, toIndex);
             return (
               <path
                 key={`${from}-${to}`}
@@ -452,6 +454,104 @@ function Laptop() {
   );
 }
 
+function MobileHero() {
+  return (
+    <div className="mx-auto w-full max-w-[31rem] py-6 text-[#223750]">
+      <div className="rounded-[2rem] bg-[#ece1d2]/95 p-5 shadow-[0_28px_90px_rgba(20,35,56,.24)] ring-1 ring-white/45">
+        <div className="border-b border-[#283b53]/10 pb-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-[#9b6d4f]">Shana Bhojwani</p>
+          <h1 className="mt-2 text-3xl font-semibold leading-tight text-[#20354d]">
+            Business Analyst · Product & Operations
+          </h1>
+          <p className="mt-3 text-base leading-7 text-[#4f5b68]">
+            I like turning messy information into clear systems people can actually use.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2 text-xs text-[#4e5966]">
+            <span className="rounded-full bg-[#243850] px-3 py-1.5 text-white">Paris-based</span>
+            <span className="rounded-full bg-white/70 px-3 py-1.5">Open internationally</span>
+            {["French", "English", "Spanish", "Italian", "Hindi"].map((language) => (
+              <span key={language} className="rounded-full bg-white/55 px-3 py-1.5">{language}</span>
+            ))}
+          </div>
+        </div>
+
+        <section className="mt-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8c684e]">How I think</p>
+          <div className="mt-3 space-y-2">
+            {thinkingNodes.map((node, index) => (
+              <div key={node.id} className="rounded-2xl bg-[#fffaf0]/82 p-3 shadow-[inset_0_0_0_1px_rgba(45,39,32,.06)]">
+                <div className="flex items-start gap-2">
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#f0c987]/45 text-[#a56d4a]">{index + 1}</span>
+                  <div>
+                    <p className="font-semibold leading-5">{node.label}</p>
+                    <p className="mt-1 text-sm leading-6 text-[#5e6672]">{node.story}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-6">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8c684e]">Things I naturally notice</p>
+          <div className="mt-3 grid gap-2">
+            {observations.map((observation) => {
+              const Icon = observation.icon;
+              return (
+                <div key={observation.line} className="rounded-2xl bg-white/68 p-3 shadow-[inset_0_0_0_1px_rgba(45,39,32,.06)]">
+                  <div className="flex items-start gap-2">
+                    <Icon className="mt-0.5 h-4 w-4 shrink-0 text-[#a56d4a]" strokeWidth={1.8} />
+                    <div>
+                      <p className="font-semibold leading-5">{observation.line}</p>
+                      <p className="mt-1 text-sm leading-6 text-[#5e6672]">{observation.detail}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="mt-6">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8c684e]">Moments where clarity changed something</p>
+          <div className="mt-3 space-y-3">
+            {memoryCards.map((card) => {
+              const Icon = card.icon;
+              return (
+                <a key={card.title} href={card.href} className="block rounded-2xl bg-[#fffaf0]/86 p-4 shadow-paper ring-1 ring-[#463629]/8">
+                  <div className="flex items-center gap-2 text-[#a56d4a]">
+                    <Icon className="h-4 w-4" strokeWidth={1.8} />
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em]">Case</p>
+                  </div>
+                  <h2 className="mt-2 text-lg font-semibold text-[#243850]">{card.title}</h2>
+                  <p className="mt-2 text-sm leading-6 text-[#5e6672]">{card.visible}</p>
+                  <p className="mt-2 font-serif text-sm italic text-[#8c684e]">{card.line}</p>
+                  <p className="mt-3 inline-flex rounded-full bg-[#f0c987]/80 px-3 py-1.5 text-xs font-bold text-[#243850]">{card.result}</p>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="mt-6 rounded-2xl bg-[#243850]/[.055] p-3">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8c684e]">Curiosity outside the project file</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {curiosityTopics.map((topic) => (
+              <span key={topic.title} className="rounded-full bg-white/70 px-3 py-1.5 text-xs text-[#4e5966]">{topic.shortTitle}</span>
+            ))}
+          </div>
+        </section>
+
+        <div className="mt-6 flex flex-wrap gap-2">
+          <Button asChild className="h-9 px-4 py-1.5"><a href="#work">View work <ArrowRight className="h-4 w-4" /></a></Button>
+          <Button asChild variant="secondary" className="h-9 px-4 py-1.5"><a href={portfolioData.person.cv} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("cv_download_click", "hero_mobile")}><FileText className="h-4 w-4" /> CV</a></Button>
+          <Button asChild variant="ghost"><a className="text-[#243850] hover:bg-white/40" href="#contact"><Mail className="h-4 w-4" /> Contact</a></Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function WorkspaceObjects({ parallax }: { parallax: { x: number; y: number } }) {
   const [postItText, setPostItText] = useState(postItNotes[0]);
 
@@ -529,12 +629,16 @@ export function Hero() {
       <HeroAtmosphere />
 
       <div className="cinematic-shell relative z-20">
-        <div className="relative mx-auto max-w-[1500px]">
+        <div className="md:hidden">
+          <MobileHero />
+        </div>
+
+        <div className="relative mx-auto hidden max-w-[1500px] md:block">
           <Laptop />
           <WorkspaceObjects parallax={parallax} />
         </div>
 
-        <div className="mx-auto mt-0 flex max-w-[1120px] flex-col gap-2 md:flex-row md:items-center md:justify-between">
+        <div className="mx-auto mt-0 hidden max-w-[1120px] flex-col gap-2 md:flex md:flex-row md:items-center md:justify-between">
           <p className="text-[10px] uppercase tracking-[0.22em] text-[#fff0cc]/72">visual thinking · calm systems · useful outcomes</p>
           <div className="translate-y-0.5 flex flex-wrap gap-2">
             <Button asChild className="h-9 px-4 py-1.5"><a href="#work">View work <ArrowRight className="h-4 w-4" /></a></Button>

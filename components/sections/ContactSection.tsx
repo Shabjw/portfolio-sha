@@ -68,7 +68,7 @@ export function ContactSection() {
                   </a>
                 </Button>
                 <Button asChild variant="ghost">
-                  <a href={portfolioData.person.linkedin} onClick={() => trackEvent("linkedin_click", "contact")}>
+                  <a href={portfolioData.person.linkedin} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("linkedin_click", "contact")}>
                     <Linkedin className="h-4 w-4" />
                     LinkedIn
                   </a>

@@ -81,7 +81,28 @@ export function ThingsOnMyMind() {
         </div>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="flex flex-wrap gap-2 sm:hidden">
+            {topics.map((topic, index) => {
+              const isActive = activeTopic === index;
+
+              return (
+                <button
+                  key={topic.title}
+                  type="button"
+                  onClick={() => setActiveTopic(index)}
+                  className={`rounded-full border px-3 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ffe0ac]/45 ${
+                    isActive
+                      ? "border-[#ffe0ac]/45 bg-[#ffe0ac]/18 text-[#fff2d3]"
+                      : "border-white/10 bg-white/[.06] text-white/78"
+                  }`}
+                >
+                  {topic.title}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="hidden gap-3 sm:grid sm:grid-cols-2">
             {topics.map((topic, index) => {
               const Icon = topic.icon;
               const isActive = activeTopic === index;
@@ -109,11 +130,11 @@ export function ThingsOnMyMind() {
             })}
           </div>
 
-          <article className="flex h-[32rem] flex-col justify-between rounded-[2rem] border border-[#ffe0ac]/16 bg-white/[.075] p-7 shadow-[0_28px_90px_rgba(0,0,0,.18)] backdrop-blur">
+          <article className="flex min-h-[26rem] flex-col justify-between rounded-[2rem] border border-[#ffe0ac]/16 bg-white/[.075] p-6 shadow-[0_28px_90px_rgba(0,0,0,.18)] backdrop-blur sm:min-h-[32rem] sm:p-7 lg:h-[32rem]">
             <div>
               <p className="text-xs uppercase tracking-[0.24em] text-[#ffe0ac]/72">Current thought</p>
               <h3 className="mt-4 font-display text-3xl font-semibold text-[#fff2d3]">{active.title}</h3>
-              <div className="mt-6 max-h-[21rem] space-y-4 overflow-y-auto pr-2 text-[17px] leading-8 text-white/78">
+              <div className="mt-5 space-y-3 text-[15px] leading-7 text-white/78 sm:text-[16px] sm:leading-7">
                 {active.note.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
