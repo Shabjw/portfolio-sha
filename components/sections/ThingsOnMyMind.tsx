@@ -69,7 +69,7 @@ export function ThingsOnMyMind() {
   const active = topics[activeTopic];
 
   return (
-    <section id="mind" className="relative overflow-hidden bg-[#17263a] py-20 text-white md:py-28">
+    <section id="mind" className="relative overflow-hidden bg-[linear-gradient(180deg,#223750_0%,#17263a_34%,#142236_100%)] py-20 text-white md:py-28">
       <div className="ambient-orb left-[10%] top-[14%] h-72 w-72 bg-[#ffc17d]/18" />
       <div className="ambient-orb bottom-[8%] right-[10%] h-80 w-80 bg-[#aeb7df]/16" />
       <div className="section-shell relative z-10">

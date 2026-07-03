@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import { GitBranch, Handshake, Layers3, RefreshCcw } from "lucide-react";
@@ -6,10 +6,10 @@ import { portfolioData } from "@/data/portfolioData";
 
 const thinkingIcons = [GitBranch, Handshake, Layers3, RefreshCcw];
 const thinkingCues = [
-  ["needs", "constraints", "shared view"],
-  ["business", "product", "data"],
-  ["dashboard", "CRM", "documentation"],
-  ["less repeat", "reuse", "handoff"]
+  ["Need", "Constraint", "Shared View"],
+  ["Business", "Product", "Data"],
+  ["Dashboard", "CRM", "Documentation"],
+  ["Less Repeat", "Reuse", "Handoff"]
 ];
 
 function ThinkingSketch({ index }: { index: number }) {
@@ -36,8 +36,8 @@ function ThinkingSketch({ index }: { index: number }) {
 
 export function StoryStack() {
   return (
-    <section id="thinking" className="section-shell py-[4.5rem] md:py-24">
-      <div className="grid gap-8 md:grid-cols-[0.75fr_1.25fr]">
+    <section id="thinking" className="bg-[linear-gradient(180deg,#f7efe2_0%,#f3e7d6_100%)] py-[4.5rem] md:py-24">
+      <div className="section-shell grid gap-8 md:grid-cols-[0.75fr_1.25fr]">
         <div className="md:sticky md:top-24 md:h-fit">
           <p className="text-xs uppercase tracking-[0.32em] text-muted-foreground">How I Think · observatory notes</p>
           <h2 className="mt-4 max-w-sm font-display text-4xl font-semibold tracking-tight md:text-[2.85rem]">
@@ -51,11 +51,11 @@ export function StoryStack() {
           {portfolioData.thinking.map((item, index) => (
             <motion.article
               key={item.title}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={false}
+              whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "-20%" }}
               transition={{ duration: 0.45, delay: index * 0.08 }}
-              className="relative overflow-hidden rounded-[2rem] bg-[#fffaf0]/88 p-6 shadow-soft ring-1 ring-white/70"
+              className="relative overflow-hidden rounded-[2rem] bg-[#fffaf0]/90 p-6 shadow-[0_24px_80px_rgba(45,38,31,.10)] ring-1 ring-white/75"
             >
               <span className="absolute right-7 top-5 text-6xl font-semibold text-[#d9c8b3]/18">0{index + 1}</span>
               <h3 className="font-display text-[1.65rem] font-semibold">{item.title}</h3>
@@ -75,5 +75,6 @@ export function StoryStack() {
     </section>
   );
 }
+
 
 

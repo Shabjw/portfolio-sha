@@ -1,13 +1,40 @@
-"use client";
+﻿"use client";
 
-import { FileText, Linkedin, Mail, MapPin } from "lucide-react";
+import { Copy, FileText, Linkedin, MapPin } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { portfolioData } from "@/data/portfolioData";
 import { trackEvent } from "@/lib/analytics";
 
 export function ContactSection() {
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!copied) return;
+    const id = window.setTimeout(() => setCopied(false), 2000);
+    return () => window.clearTimeout(id);
+  }, [copied]);
+
+  async function copyEmail() {
+    try {
+      await navigator.clipboard.writeText(portfolioData.person.email);
+    } catch {
+      const textarea = document.createElement("textarea");
+      textarea.value = portfolioData.person.email;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+    }
+    setCopied(true);
+    trackEvent("email_copy_click", "contact");
+  }
+
   return (
-    <section id="contact" className="bg-[#f7efe2] py-20 md:py-28">
+    <section id="contact" className="bg-[#142236] py-20 md:py-28">
       <div className="section-shell">
         <div className="relative overflow-hidden rounded-[2rem] bg-[#fffaf0] p-7 shadow-soft ring-1 ring-[#dfd0bd] md:p-10">
           <div className="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[#f0a45e]/14 blur-3xl" />
@@ -55,11 +82,9 @@ export function ContactSection() {
               </div>
 
               <div className="mt-7 flex flex-wrap gap-2 border-t border-[#dfd0bd] pt-5">
-                <Button asChild>
-                  <a href={`mailto:${portfolioData.person.email}`}>
-                    <Mail className="h-4 w-4" />
-                    Email
-                  </a>
+                <Button type="button" onClick={copyEmail}>
+                  <Copy className="h-4 w-4" />
+                  Copy email
                 </Button>
                 <Button asChild variant="secondary">
                   <a href={portfolioData.person.cv} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("cv_download_click", "contact")}>
@@ -74,6 +99,14 @@ export function ContactSection() {
                   </a>
                 </Button>
               </div>
+              <div
+                aria-live="polite"
+                className={`pointer-events-none absolute bottom-5 left-6 rounded-full bg-[#243850] px-3 py-1.5 text-sm text-white shadow-paper transition duration-300 ${
+                  copied ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
+                }`}
+              >
+                Email copied
+              </div>
             </aside>
           </div>
         </div>
@@ -81,3 +114,4 @@ export function ContactSection() {
     </section>
   );
 }
+

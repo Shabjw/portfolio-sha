@@ -2,6 +2,7 @@
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://shanabhojwani.com"),
   title: "Shana Bhojwani | Business Analyst · Product & Operations",
   description: "Business Analyst focused on turning messy information into clear systems, useful workflows and better decisions.",
   openGraph: {

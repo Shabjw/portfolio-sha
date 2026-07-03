@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import { useEffect, useState, type MouseEvent } from "react";
@@ -103,8 +103,8 @@ const curiosityTopics = [
   {
     title: "AI automation & Codex projects",
     shortTitle: "AI & Codex",
-    cleanNote: "Recently I've been building small tools to automate everyday problems. Mostly because I enjoy making life slightly easier. The fun part is not replacing people — it is removing repetitive work.",
-    note: "Recently I've been building small tools to automate everyday problems. Mostly because I enjoy making life slightly easier. The fun part is not replacing people — it is removing repetitive work."
+    cleanNote: "Recently I've been building small tools to automate everyday problems. Mostly because I enjoy making life slightly easier. The fun part is not replacing people - it is removing repetitive work.",
+    note: "Recently I've been building small tools to automate everyday problems. Mostly because I enjoy making life slightly easier. The fun part is not replacing people - it is removing repetitive work."
   },
   {
     title: "Product thinking",
@@ -543,7 +543,7 @@ function MobileHero() {
         </section>
 
         <div className="mt-6 flex flex-wrap gap-2">
-          <Button asChild className="h-9 px-4 py-1.5"><a href="#work">View work <ArrowRight className="h-4 w-4" /></a></Button>
+          <Button asChild className="h-9 px-4 py-1.5"><a href="#thinking">View work <ArrowRight className="h-4 w-4" /></a></Button>
           <Button asChild variant="secondary" className="h-9 px-4 py-1.5"><a href={portfolioData.person.cv} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("cv_download_click", "hero_mobile")}><FileText className="h-4 w-4" /> CV</a></Button>
           <Button asChild variant="ghost"><a className="text-[#243850] hover:bg-white/40" href="#contact"><Mail className="h-4 w-4" /> Contact</a></Button>
         </div>
@@ -566,7 +566,7 @@ function WorkspaceObjects({ parallax }: { parallax: { x: number; y: number } }) 
           <Image src={coffeeImage} alt="Hand-drawn cup of coffee" className="h-auto w-full drop-shadow-[0_22px_30px_rgba(47,31,25,.28)]" priority />
           <span className="steam absolute left-[47%] top-[1%] h-16 w-6 rounded-full border-l border-[#fff3dc]/55 [animation-delay:.5s]" />
           <span className="steam absolute left-[57%] top-[-3%] h-20 w-8 rounded-full border-l border-[#fff3dc]/40 [animation-delay:1.4s]" />
-          <div className="pointer-events-none absolute left-[62%] top-[calc(96%-3px)] w-60 translate-x-2 translate-y-2 rounded-xl bg-[#fff4df]/95 p-3 text-[12px] leading-5 text-[#5f493b] opacity-0 shadow-paper transition duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="pointer-events-none absolute left-[62%] top-[calc(96%_-_53px)] w-[min(15rem,calc(100vw-2rem))] translate-x-2 translate-y-2 rounded-xl bg-[#fff4df]/95 p-3 text-[12px] leading-5 text-[#5f493b] opacity-0 shadow-paper transition duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100">
             Coffee is not really the point. The atmosphere is. I think better in places that help me slow down.
           </div>
         </div>
@@ -589,7 +589,7 @@ function WorkspaceObjects({ parallax }: { parallax: { x: number; y: number } }) 
           <div className="relative rounded-sm drop-shadow-[0_20px_34px_rgba(37,29,28,.2)]">
             <Image src={worldmapImage} alt="Travel sketch connecting Paris, Tenerife and Seoul" className="h-auto w-full" priority />
           </div>
-          <div className="pointer-events-none absolute bottom-[calc(100%_+_8px)] right-8 w-60 translate-y-2 rounded-xl bg-[#fff4df]/95 p-3 text-[12px] leading-5 text-[#5f493b] opacity-0 shadow-paper transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="pointer-events-none absolute right-[clamp(2rem,12vw,8rem)] top-[calc(100%_-_182px)] w-[min(15rem,calc(100vw-2rem))] translate-y-2 rounded-xl bg-[#fff4df]/95 p-3 text-[12px] leading-5 text-[#5f493b] opacity-0 shadow-paper transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
             Travelling made me notice how differently people solve the same everyday problems.
           </div>
         </div>
@@ -598,7 +598,7 @@ function WorkspaceObjects({ parallax }: { parallax: { x: number; y: number } }) 
       <div className="group absolute left-[calc(18px_-_135px)] top-[25%] z-40 hidden aspect-square w-[clamp(5.4rem,5.2vw,6.6rem)] -rotate-[3deg] place-items-center rounded-sm bg-[#ffe6a9] p-3 text-center text-[#4c382d] shadow-[0_22px_46px_rgba(50,35,29,.22)] ring-1 ring-white/55 xl:grid 2xl:left-[calc(40px_-_135px)]">
         <span className="absolute -top-3 right-6 h-6 w-16 rotate-[7deg] bg-[#f6d6a5]/78 shadow-paper" />
         <p className="font-serif text-[15px] italic leading-5">{postItText}</p>
-        <span className="pointer-events-none absolute left-full top-1/2 ml-3 w-56 -translate-y-1/2 rounded-xl bg-[#fff4df]/95 p-3 text-left text-[12px] leading-5 text-[#5f493b] opacity-0 shadow-paper transition duration-300 group-hover:opacity-100">
+        <span className="pointer-events-none absolute left-full top-1/2 ml-3 w-[min(14rem,calc(100vw-2rem))] -translate-y-1/2 rounded-xl bg-[#fff4df]/95 p-3 text-left text-[12px] leading-5 text-[#5f493b] opacity-0 shadow-paper transition duration-300 group-hover:opacity-100">
           This is usually where I start when something feels unnecessarily complicated.
         </span>
       </div>
@@ -639,17 +639,19 @@ export function Hero() {
         </div>
 
         <div className="mx-auto mt-0 hidden max-w-[1120px] flex-col gap-2 md:flex md:flex-row md:items-center md:justify-between">
-          <p className="text-[10px] uppercase tracking-[0.22em] text-[#fff0cc]/72">visual thinking · calm systems · useful outcomes</p>
+          <p className="text-[10px] uppercase tracking-[0.22em] text-[#fff0cc]/80">visual thinking · calm systems · useful outcomes</p>
           <div className="translate-y-0.5 flex flex-wrap gap-2">
-            <Button asChild className="h-9 px-4 py-1.5"><a href="#work">View work <ArrowRight className="h-4 w-4" /></a></Button>
+              <Button asChild className="h-9 px-4 py-1.5"><a href="#thinking">View work <ArrowRight className="h-4 w-4" /></a></Button>
             <Button asChild variant="secondary" className="h-9 px-4 py-1.5"><a href={portfolioData.person.cv} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("cv_download_click", "hero")}><FileText className="h-4 w-4" /> CV</a></Button>
-            <Button asChild variant="ghost"><a className="text-[#fff9ed] hover:bg-white/10" href="#contact"><Mail className="h-4 w-4" /> Contact</a></Button>
+            <Button asChild variant="ghost" className="h-9 px-4 py-1.5"><a className="text-[#fff9ed] hover:bg-white/10" href="#contact"><Mail className="h-4 w-4" /> Contact</a></Button>
           </div>
         </div>
       </div>
     </section>
   );
 }
+
+
 
 
 
