@@ -36,7 +36,7 @@ function ThinkingSketch({ index }: { index: number }) {
 
 export function StoryStack() {
   return (
-    <section id="thinking" className="bg-[linear-gradient(180deg,#f7efe2_0%,#f3e7d6_100%)] py-[4.5rem] md:py-24">
+    <section id="thinking" className="bg-transparent pt-[4.5rem] pb-12 md:pt-24 md:pb-16">
       <div className="section-shell grid gap-8 md:grid-cols-[0.75fr_1.25fr]">
         <div className="md:sticky md:top-24 md:h-fit">
           <p className="text-xs uppercase tracking-[0.32em] text-muted-foreground">How I Think · observatory notes</p>

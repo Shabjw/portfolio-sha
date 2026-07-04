@@ -639,7 +639,7 @@ export function Hero() {
         </div>
 
         <div className="mx-auto mt-0 hidden max-w-[1120px] flex-col gap-2 md:flex md:flex-row md:items-center md:justify-between">
-          <p className="text-[10px] uppercase tracking-[0.22em] text-[#fff0cc]/80">visual thinking · calm systems · useful outcomes</p>
+          <p className="text-[10px] uppercase tracking-[0.22em] text-[#fff3d4]/90">visual thinking · calm systems · useful outcomes</p>
           <div className="translate-y-0.5 flex flex-wrap gap-2">
               <Button asChild className="h-9 px-4 py-1.5"><a href="#thinking">View work <ArrowRight className="h-4 w-4" /></a></Button>
             <Button asChild variant="secondary" className="h-9 px-4 py-1.5"><a href={portfolioData.person.cv} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("cv_download_click", "hero")}><FileText className="h-4 w-4" /> CV</a></Button>

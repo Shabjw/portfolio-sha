@@ -136,7 +136,7 @@ export function ProjectGrid() {
   const projects = filter === "All" ? portfolioData.projects : portfolioData.projects.filter((project) => project.category === filter);
 
   return (
-    <section id="work" className="bg-[linear-gradient(180deg,#f3e7d6_0%,#f5e2d8_54%,#f1dfcf_100%)] py-24 md:py-32">
+    <section id="work" className="bg-transparent pt-12 pb-14 md:pt-16 md:pb-16">
       <div className="section-shell">
       <div className="flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
         <div>

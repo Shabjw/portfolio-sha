@@ -34,7 +34,7 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="bg-[#142236] py-20 md:py-28">
+    <section id="contact" className="bg-transparent pt-8 pb-12 md:pt-12 md:pb-16">
       <div className="section-shell">
         <div className="relative overflow-hidden rounded-[2rem] bg-[#fffaf0] p-7 shadow-soft ring-1 ring-[#dfd0bd] md:p-10">
           <div className="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[#f0a45e]/14 blur-3xl" />
