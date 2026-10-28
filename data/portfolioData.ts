@@ -12,23 +12,23 @@
   },
   thinking: [
     {
-      title: "Clarify ambiguity",
-      copy: "I like taking scattered needs, unclear processes and messy information, then turning them into something teams can understand and act on.",
+      title: "Understand Before Fixing",
+      copy: "I usually start with questions. What are people trying to do? Where do they get stuck? A workshop or a conversation often changes my understanding of the problem before I open a tool.",
       tags: ["requirements", "workshops", "process mapping"]
     },
     {
-      title: "Connect teams",
-      copy: "I naturally work between business, product, data, support and operations, translating needs into shared language.",
+      title: "Put the Pieces Together",
+      copy: "A dashboard tells part of the story. So does a support conversation. I like bringing those views together so business, product and operations can work from the same understanding.",
       tags: ["business", "product", "ops", "data"]
     },
     {
-      title: "Structure systems",
-      copy: "Dashboards, CRM workflows, documentation hubs and process maps are all ways to make work easier to follow.",
+      title: "Make the Next Step Clear",
+      copy: "Sometimes the answer is a clearer CRM pipeline. Sometimes it is a dashboard or a guide. I choose the format around what people need to see, decide or do next.",
       tags: ["dashboards", "CRM", "documentation"]
     },
     {
-      title: "Make work reusable",
-      copy: "I care about reducing repeated questions, duplicated effort and one-off solutions.",
+      title: "Build Something People Can Reuse",
+      copy: "If the same question or task keeps coming back, I start wondering what could make it easier next time. That might mean documenting an answer, automating an Excel task or testing a small tool with AI.",
       tags: ["automation", "knowledge", "clarity"]
     }
   ],

@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 :root {
+  --chapter-space: 34px;
   --background: 39 38% 92%;
   --foreground: 32 12% 14%;
   --card: 42 45% 98%;
@@ -17,6 +18,10 @@
   --input: 34 22% 84%;
   --ring: 215 38% 22%;
 }
+
+.after-hero { position: relative; }
+.after-hero::before { content: ''; position: absolute; pointer-events: none; z-index: 1; inset: -32px 0 auto; height: 64px; background: linear-gradient(180deg,rgba(247,239,226,0),rgba(247,239,226,.72) 50%,#f7efe2); }
+@media (max-width: 700px) { :root { --chapter-space: 27px; } }
 
 * {
   box-sizing: border-box;

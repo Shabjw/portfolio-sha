@@ -1,0 +1,53 @@
+.section { padding: var(--chapter-space) 0; color: #304653; background: linear-gradient(180deg, #e9dcca, #dddcd2 55%, #c4cdd0); }
+.chapter { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 18px; border-bottom: 1px solid #fff7e93d; font-size: 12px; }
+.layout { display: grid; grid-template-columns: .8fr 1.2fr; align-items: start; gap: 64px; margin-top: 36px; }
+.index h2 { font: 400 40px/1.15 Georgia, serif; color: #304653; }
+.index h2 em { color: #83624e; }
+.intro { font-size: 15px; line-height: 1.7; max-width: 310px; margin-top: 20px; color: #52616a; }
+.topics { display: grid; gap: 4px; margin-top: 28px; }
+.topics button { display: flex; align-items: center; gap: 14px; min-height: 52px; padding: 12px 14px; text-align: left; border: 1px solid transparent; border-radius: 4px; color: #fff7e9; transition: background .2s, color .2s; }
+.topics button span { font-size: 15px; }
+.topics button small { margin-left: auto; font: italic 14px Georgia, serif; opacity: .7; }
+.topics button svg { flex-shrink: 0; }
+.topics button:hover { background: #fff7e918; }
+.topics button[aria-pressed=true] { background: #f8efdf; color: #30475a; border-color: #fff7e9; box-shadow: 0 5px 15px #16293d10; }
+.topics button:focus-visible, .pageControls button:focus-visible { outline: 2px solid #c69360; outline-offset: 3px; }
+.annotation { margin: 28px 0 0 14px; font: italic 19px Georgia,serif; transform: rotate(-3deg); color: #83624e; }
+.notebook { position: relative; min-width: 0; border: 1px solid #f8efdf; border-radius: 6px 10px 10px 6px; background: #faf4e8; color: #314354; box-shadow: 6px 6px 0 -2px #e2d7c4, 11px 11px 0 -5px #f5ebd9, 0 18px 45px #13263a24; }
+.notebook::before { content: ''; position: absolute; top: -12px; right: 35px; width: 22px; height: 46px; border: 2px solid #9f7959; border-radius: 12px; transform: rotate(8deg); pointer-events: none; }
+.pages { display: grid; }
+.page[aria-hidden=false] { animation: reveal .2s ease-out; }
+@keyframes reveal { from { opacity: 0; } to { opacity: 1; } }
+.page { grid-area: 1 / 1; min-width: 0; padding: 30px 36px 22px; display: flex; flex-direction: column; background-image: linear-gradient(90deg, transparent 19px, #bc8b7933 19px, #bc8b7933 20px, transparent 20px); }
+.pageMeta { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #7a6a58; }
+.page h3 { display: flex; align-items: center; gap: 14px; font: 400 30px/1.25 Georgia,serif; margin: 22px 0 20px; }
+.page h3 svg { flex-shrink: 0; color: #956d4d; }
+.note { font-size: 15px; line-height: 1.8; color: #4b5860; }
+.note p + p { margin-top: 15px; }
+.note .opening { font-size: 17px; font-weight: 500; color: #2e4350; }
+.margin { margin-top: auto; padding-top: 26px; font: italic 17px/1.5 Georgia,serif; color: #956d4d; }
+.pageControls { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #30475a22; margin: 0 36px; padding: 12px 0; }
+.pageControls span { font-size: 12px; color: #7a6a58; }
+.pageControls button { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; transition: background .2s; }
+.pageControls button:hover { background: #e8ddc8; }
+@media (max-width: 1000px) { .layout { gap: 32px; grid-template-columns: .75fr 1.25fr; } .page { padding: 28px 30px 22px; } .index h2 { font-size: 34px; } }
+@media (max-width: 700px) {
+  .section { padding-top: var(--chapter-space); }
+  .chapter > span:last-child { display: none; }
+  .layout { grid-template-columns: 1fr; gap: 28px; margin-top: 28px; }
+  .intro { max-width: none; margin-top: 14px; }
+  .topics { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; margin-top: 22px; }
+  .topics button { padding: 11px 10px; gap: 8px; min-height: 48px; background: #1b35484d; border-color: #fff7e926; }
+  .topics button span { font-size: 13px; }
+  .topics button svg { width: 17px; }
+  .topics button small, .annotation { display: none; }
+  .notebook { margin-right: 6px; }
+  .page { padding: 25px 25px 20px; background-position: -7px 0; }
+  .page h3 { font-size: 27px; }
+  .note { line-height: 1.75; }
+  .pageControls { margin-inline: 25px; }
+}
+.topics button { color: #304653; }
+.topics button:hover { background: #fff7e955; }
+.chapter { border-bottom-color: #30465333; }
+@media (prefers-reduced-motion: reduce) { .topics button, .pageControls button { transition: none; } .page[aria-hidden=false] { animation: none; } }

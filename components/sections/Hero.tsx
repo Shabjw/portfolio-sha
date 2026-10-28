@@ -370,7 +370,7 @@ function ObservationPanel() {
   useEffect(() => {
     const id = window.setInterval(() => {
       setActiveObservation((current) => (current + 1) % observations.length);
-    }, 3600);
+    }, 6000);
     return () => window.clearInterval(id);
   }, []);
 

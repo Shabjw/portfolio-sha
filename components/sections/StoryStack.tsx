@@ -1,80 +1,31 @@
-﻿"use client";
+"use client";
 
-import { motion } from "framer-motion";
-import { GitBranch, Handshake, Layers3, RefreshCcw } from "lucide-react";
-import { portfolioData } from "@/data/portfolioData";
+import { useState } from "react";
+import { Ear, ScanSearch, PencilRuler, Repeat2, ArrowRight, Pause, Play } from "lucide-react";
+import { useAutoBrowse } from "./useAutoBrowse";
+import styles from "./WorkChapters.module.css";
 
-const thinkingIcons = [GitBranch, Handshake, Layers3, RefreshCcw];
-const thinkingCues = [
-  ["Need", "Constraint", "Shared View"],
-  ["Business", "Product", "Data"],
-  ["Dashboard", "CRM", "Documentation"],
-  ["Less Repeat", "Reuse", "Handoff"]
+const steps = [
+  { icon: Ear, title: "Listen", question: "What are people trying to do?", copy: "I start with the people doing the work. The useful details often come out in conversation.", practice: "Interviews · Workshops · Requirements", from: "The first request", to: "The actual need" },
+  { icon: ScanSearch, title: "Connect", question: "What keeps coming back?", copy: "I compare what people tell me with what the data shows. Repeated questions often point to a shared problem.", practice: "SQL · Metabase · Analysis", from: "Scattered signals", to: "A shared pattern" },
+  { icon: PencilRuler, title: "Clarify", question: "Can we see the same picture?", copy: "A map, a dashboard or clearer requirements give people something concrete to discuss and decide on.", practice: "Process mapping · Dashboards", from: "Different views", to: "Shared understanding" },
+  { icon: Repeat2, title: "Simplify", question: "What would make next time easier?", copy: "I look for something people can reuse: a small automation, a clearer handoff or an answer they can find.", practice: "Automation · CRM · Documentation", from: "Repeated effort", to: "A useful system" }
 ];
 
-function ThinkingSketch({ index }: { index: number }) {
-  const Icon = thinkingIcons[index] ?? GitBranch;
-  const cues = thinkingCues[index] ?? thinkingCues[0];
-
-  return (
-    <div className="relative mt-5 overflow-hidden rounded-2xl bg-[linear-gradient(135deg,#f4e0c4,#e7edf0)] p-4 ring-1 ring-white/70">
-      <div className="absolute -right-10 -top-10 h-24 w-24 rounded-full bg-[#f0a45e]/16 blur-2xl" />
-      <div className="absolute left-4 top-4 grid h-10 w-10 place-items-center rounded-2xl bg-white/72 shadow-paper">
-        <Icon className="h-[1.125rem] w-[1.125rem] text-[#253b56]" />
-      </div>
-      <div className="ml-14 flex min-h-12 flex-wrap items-center gap-2">
-        {cues.map((cue, cueIndex) => (
-          <span key={cue} className="rounded-full bg-white/70 px-2.5 py-1 text-[11.5px] text-[#253b56] shadow-paper">
-            {cue}
-            {cueIndex < cues.length - 1 ? <span className="ml-2 text-[#a56d4a]/65">→</span> : null}
-          </span>
-        ))}
+export function StoryStack() {
+  const [active, setActive] = useState(0);
+  const rotation = useAutoBrowse(() => setActive(value => (value + 1) % steps.length), 6000);
+  const step = steps[active];
+  return <section id="thinking" className={styles.method} aria-labelledby="method-heading">
+    <div className="section-shell" ref={rotation.ref}>
+      <div className={styles.chapterLabel}><span>01 / How I work</span><a href="#work">See it in practice <ArrowRight size={14} aria-hidden="true" /></a></div>
+      <div className={styles.compactHeading}><h2 id="method-heading" className={styles.headline}>From a good question<br /><em>to a useful answer.</em></h2><p>People first. Data for context. A simpler next step.</p></div>
+      <div className={styles.rotationControl}><button data-autoplay-control type="button" onClick={rotation.toggle} aria-label={rotation.paused ? "Play thinking rotation" : "Pause thinking rotation"}>{rotation.paused ? <Play size={16} /> : <Pause size={16} />}</button></div>
+      <div className={styles.methodSwitch} role="group" aria-label="Explore how I work">{steps.map((item, index) => <button key={item.title} type="button" aria-pressed={active === index} aria-controls="method-preview" onClick={() => setActive(index)}><item.icon size={25} strokeWidth={1.5} aria-hidden="true" /><span><small>0{index + 1}</small>{item.title}</span><ArrowRight size={17} aria-hidden="true" /></button>)}</div>
+      <div id="method-preview" className={styles.methodPreview} aria-live="polite">
+        <div className={styles.methodThought}><h3>{step.question}</h3><p>{step.copy}</p><span>{step.practice}</span></div>
+        <div className={styles.methodDrawing} data-step={active} aria-hidden="true"><div className={styles.scattered}><i /><i /><i /><i /><i /></div><span>{step.from}</span><ArrowRight className={styles.drawArrow} size={32} strokeWidth={1.2} /><div className={styles.ordered}><i /><i /><i /></div><strong>{step.to}</strong></div>
       </div>
     </div>
-  );
+  </section>;
 }
-
-export function StoryStack() {
-  return (
-    <section id="thinking" className="bg-transparent pt-[4.5rem] pb-12 md:pt-24 md:pb-16">
-      <div className="section-shell grid gap-8 md:grid-cols-[0.75fr_1.25fr]">
-        <div className="md:sticky md:top-24 md:h-fit">
-          <p className="text-xs uppercase tracking-[0.32em] text-muted-foreground">How I Think · observatory notes</p>
-          <h2 className="mt-4 max-w-sm font-display text-4xl font-semibold tracking-tight md:text-[2.85rem]">
-            How Shana creates clarity.
-          </h2>
-          <p className="mt-4 max-w-sm leading-7 text-muted-foreground">
-            A quiet operating rhythm: listen, map, structure, then make the work reusable.
-          </p>
-        </div>
-        <div className="space-y-4">
-          {portfolioData.thinking.map((item, index) => (
-            <motion.article
-              key={item.title}
-              initial={false}
-              whileInView={{ y: 0 }}
-              viewport={{ once: true, margin: "-20%" }}
-              transition={{ duration: 0.45, delay: index * 0.08 }}
-              className="relative overflow-hidden rounded-[2rem] bg-[#fffaf0]/90 p-6 shadow-[0_24px_80px_rgba(45,38,31,.10)] ring-1 ring-white/75"
-            >
-              <span className="absolute right-7 top-5 text-6xl font-semibold text-[#d9c8b3]/18">0{index + 1}</span>
-              <h3 className="font-display text-[1.65rem] font-semibold">{item.title}</h3>
-              <p className="mt-3 max-w-2xl text-[15.5px] leading-7 text-muted-foreground">{item.copy}</p>
-              <ThinkingSketch index={index} />
-              <div className="mt-4 flex flex-wrap gap-2">
-                {item.tags.map((tag) => (
-                  <span key={tag} className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </motion.article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-
-

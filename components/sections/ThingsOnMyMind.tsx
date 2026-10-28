@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Brain, ChartLine, Globe2, Sparkles, Trophy, WandSparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Brain, ChartLine, Globe2, Sparkles, Trophy, WandSparkles, Pause, Play } from "lucide-react";
+import { useAutoBrowse } from "./useAutoBrowse";
+
+import styles from "./MindNotebook.module.css";
 
 const topics = [
   {
@@ -64,86 +67,46 @@ const topics = [
   }
 ];
 
+const labels = ["AI & Codex", "Product ideas", "Cultures", "Investing", "Everyday systems", "Badminton"];
+const cues = ["Make room for better work", "An idea worth keeping", "Another way to do things", "Rules before reactions", "One less thing to remember", "Observe. Adjust. Try again."];
+
 export function ThingsOnMyMind() {
   const [activeTopic, setActiveTopic] = useState(0);
-  const active = topics[activeTopic];
-
-  return (
-    <section id="mind" className="relative overflow-hidden bg-transparent pt-8 pb-16 text-white md:pt-10 md:pb-20">
-      <div className="ambient-orb left-[10%] top-[14%] h-72 w-72 bg-[#ffc17d]/12" />
-      <div className="ambient-orb bottom-[8%] right-[10%] h-80 w-80 bg-[#d9e1ef]/16" />
-      <div className="section-shell relative z-10">
-        <div className="max-w-2xl">
-          <p className="text-xs uppercase tracking-[0.32em] text-[#ffe0ac]/72">Things on my mind lately</p>
-          <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-            A few topics I keep coming back to outside the project file.
-          </h2>
+  const rotation = useAutoBrowse(() => setActiveTopic(current => (current + 1) % topics.length), 6000);
+  function turnPage(direction: number) {
+    setActiveTopic(current => (current + direction + topics.length) % topics.length);
+  }
+  return <section id="mind" className={styles.section} aria-labelledby="mind-heading">
+    <div className="section-shell" ref={rotation.ref}>
+      <div className={styles.chapter}><span>03 / Things on my mind lately</span><span>Notes beyond the project file</span></div>
+      <div className={styles.layout}>
+        <div className={styles.index}>
+          <h2 id="mind-heading">A curious mind.<br /><em>A few open pages.</em></h2>
+          <p className={styles.intro}>The things I keep coming back to, even when the laptop is closed.</p>
+          <div className={styles.topics} role="group" aria-label="Choose a notebook topic">
+            {topics.map((topic, index) => <button key={topic.title} type="button" aria-pressed={activeTopic === index} aria-controls="mind-pages" onClick={() => setActiveTopic(index)}>
+              <topic.icon size={20} strokeWidth={1.5} aria-hidden="true" /><span>{labels[index]}</span><small>0{index + 1}</small>
+            </button>)}
+          </div>
+          <p className={styles.annotation} aria-hidden="true">Still asking questions.</p>
         </div>
-
-        <div className="mt-10 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="flex flex-wrap gap-2 sm:hidden">
-            {topics.map((topic, index) => {
-              const isActive = activeTopic === index;
-
-              return (
-                <button
-                  key={topic.title}
-                  type="button"
-                  onClick={() => setActiveTopic(index)}
-                  className={`rounded-full border px-3 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ffe0ac]/45 ${
-                    isActive
-                      ? "border-[#ffe0ac]/45 bg-[#ffe0ac]/18 text-[#fff2d3]"
-                      : "border-white/10 bg-white/[.06] text-white/78"
-                  }`}
-                >
-                  {topic.title}
-                </button>
-              );
-            })}
+        <div className={styles.notebook}>
+          <div id="mind-pages" className={styles.pages}>
+            {topics.map((topic, index) => <article key={topic.title} className={styles.page} aria-hidden={index !== activeTopic} style={{ visibility: index === activeTopic ? "visible" : "hidden" }}>
+              <div className={styles.pageMeta}><span>From my notebook</span></div>
+              <h3><topic.icon size={26} strokeWidth={1.3} aria-hidden="true" />{topic.title}</h3>
+              <div className={styles.note}>{topic.note.map((paragraph, paragraphIndex) => <p key={paragraph} className={paragraphIndex === 0 ? styles.opening : undefined}>{paragraph}</p>)}</div>
+              <p className={styles.margin}>{cues[index]}</p>
+            </article>)}
           </div>
-
-          <div className="hidden gap-3 sm:grid sm:grid-cols-2">
-            {topics.map((topic, index) => {
-              const Icon = topic.icon;
-              const isActive = activeTopic === index;
-
-              return (
-                <button
-                  key={topic.title}
-                  type="button"
-                  onMouseEnter={() => setActiveTopic(index)}
-                  onFocus={() => setActiveTopic(index)}
-                  onClick={() => setActiveTopic(index)}
-                  className={`group rounded-[1.3rem] border p-4 text-left transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ffe0ac]/45 ${
-                    isActive
-                      ? "border-[#ffe0ac]/36 bg-[#ffe0ac]/[.15] shadow-[0_24px_70px_rgba(0,0,0,.18)]"
-                      : "border-white/10 bg-white/[.055] hover:-translate-y-1 hover:bg-white/[.09]"
-                  }`}
-                >
-                  <span className="grid h-9 w-9 place-items-center rounded-full bg-[#ffe0ac]/14 text-[#ffe0ac] ring-1 ring-[#ffe0ac]/15">
-                    <Icon className="h-4 w-4" strokeWidth={1.8} />
-                  </span>
-                  <span className="mt-4 block font-display text-xl font-semibold text-white">{topic.title}</span>
-                  <span className={`mt-3 block h-px bg-[#ffe0ac]/45 transition-all ${isActive ? "w-24" : "w-12"}`} />
-                </button>
-              );
-            })}
+          <div className={styles.pageControls}>
+            <button type="button" aria-label="Previous thought" onClick={() => turnPage(-1)}><ArrowLeft size={18} aria-hidden="true" /></button>
+            <span aria-live="polite">Note {String(activeTopic + 1).padStart(2, "0")} / 06</span>
+            <button data-autoplay-control type="button" onClick={rotation.toggle} aria-label={rotation.paused ? "Play notebook rotation" : "Pause notebook rotation"}>{rotation.paused ? <Play size={17} /> : <Pause size={17} />}</button>
+            <button type="button" aria-label="Next thought" onClick={() => turnPage(1)}><ArrowRight size={18} aria-hidden="true" /></button>
           </div>
-
-          <article className="flex min-h-[26rem] flex-col justify-between rounded-[2rem] border border-[#ffe0ac]/16 bg-white/[.075] p-6 shadow-[0_28px_90px_rgba(0,0,0,.18)] backdrop-blur sm:min-h-[32rem] sm:p-7 lg:h-[32rem]">
-            <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-[#ffe0ac]/72">Current thought</p>
-              <h3 className="mt-4 font-display text-3xl font-semibold text-[#fff2d3]">{active.title}</h3>
-              <div className="mt-5 space-y-3 text-[15px] leading-7 text-white/78 sm:text-[16px] sm:leading-7">
-                {active.note.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-              </div>
-            </div>
-            <p className="mt-8 text-sm text-white/45">Hover or tap a note to read the thought behind it.</p>
-          </article>
         </div>
       </div>
-    </section>
-  );
+    </div>
+  </section>;
 }

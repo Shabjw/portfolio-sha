@@ -1,23 +1,47 @@
-﻿"use client";
+"use client";
 
-import { Copy, FileText, Linkedin, MapPin } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { ArrowUpRight, Check, Copy, FileText, Linkedin, Plane, Send } from "lucide-react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { portfolioData } from "@/data/portfolioData";
 import { trackEvent } from "@/lib/analytics";
+import styles from "./ContactNote.module.css";
 
 export function ContactSection() {
-  const [copied, setCopied] = useState(false);
+  const [message, setMessage] = useState("");
+  const [formState, setFormState] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const sending = useRef(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
-  useEffect(() => {
-    if (!copied) return;
-    const id = window.setTimeout(() => setCopied(false), 2000);
-    return () => window.clearTimeout(id);
-  }, [copied]);
+  async function submitMessage(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (sending.current) return;
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    sending.current = true;
+    setFormState("sending");
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 20000);
+    try {
+      const response = await fetch("https://formspree.io/f/mqppqgyq", {
+        method: "POST", body: data, headers: { Accept: "application/json" }, signal: controller.signal
+      });
+      if (!response.ok) throw new Error("Message not accepted");
+      setFormState("success");
+      form.reset();
+    } catch {
+      setFormState("error");
+    } finally {
+      clearTimeout(timeout);
+      sending.current = false;
+    }
+  }
 
   async function copyEmail() {
+    let success = false;
     try {
       await navigator.clipboard.writeText(portfolioData.person.email);
+      success = true;
     } catch {
       const textarea = document.createElement("textarea");
       textarea.value = portfolioData.person.email;
@@ -25,93 +49,52 @@ export function ContactSection() {
       textarea.style.position = "fixed";
       textarea.style.opacity = "0";
       document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textarea);
+      try { textarea.select(); success = document.execCommand("copy"); }
+      catch { success = false; }
+      finally { textarea.remove(); }
     }
-    setCopied(true);
-    trackEvent("email_copy_click", "contact");
+    if (timer.current) clearTimeout(timer.current);
+    setMessage(success ? "Email copied" : "Could not copy. You can select the address above.");
+    if (success) trackEvent("email_copy_click", "contact");
+    timer.current = setTimeout(() => setMessage(""), success ? 2000 : 5000);
   }
 
-  return (
-    <section id="contact" className="bg-transparent pt-8 pb-12 md:pt-12 md:pb-16">
-      <div className="section-shell">
-        <div className="relative overflow-hidden rounded-[2rem] bg-[#fffaf0] p-7 shadow-soft ring-1 ring-[#dfd0bd] md:p-10">
-          <div className="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[#f0a45e]/14 blur-3xl" />
-          <div className="absolute left-8 top-8 h-20 w-px rotate-[10deg] bg-[#bd7a52]/18" />
-          <div className="relative grid gap-10 md:grid-cols-[1fr_.86fr] md:items-start">
-            <div className="max-w-2xl">
-              <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Contact page</p>
-              <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight text-[#243850] md:text-6xl">
-                Let&apos;s build something clearer.
-              </h2>
-              <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
-                If your team is dealing with scattered information, unclear workflows or products that deserve more clarity, I&apos;d love to hear about it.
-              </p>
+  return <section id="contact" className={styles.section} aria-labelledby="contact-heading">
+    <div className="section-shell">
+      <div className={styles.note}>
+        <div className={styles.main}>
+          <p className={styles.eyebrow}>A conversation starts here</p>
+          <h2 id="contact-heading">Let&apos;s make<br /><em>something clearer.</em></h2>
+          <p className={styles.intro}>A role, a project, or a problem your team is figuring out. I&apos;d love to hear about it.</p>
+          <form className={styles.form} action="https://formspree.io/f/mqppqgyq" method="POST" onSubmit={submitMessage} aria-busy={formState === "sending"}>
+            <div className={styles.formRow}>
+              <label htmlFor="contact-name">Your name<input id="contact-name" name="name" autoComplete="name" required maxLength={100} /></label>
+              <label htmlFor="contact-email">Your email<input id="contact-email" name="email" type="email" autoComplete="email" required maxLength={254} /></label>
             </div>
-
-            <aside className="relative rounded-[1.5rem] bg-white/72 p-6 shadow-paper ring-1 ring-[#dfd0bd]">
-              <span className="absolute -top-3 left-8 h-6 w-20 rotate-[-3deg] bg-[#f1cf9b]/75 shadow-sm" />
-              <div className="grid gap-5 text-sm text-[#4f5b68]">
-                <div>
-                  <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#9b6d4f]">
-                    <MapPin className="h-3.5 w-3.5" />
-                    Current location
-                  </p>
-                  <p className="mt-2 text-lg font-semibold text-[#243850]">Paris</p>
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#9b6d4f]">Looking for</p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {["Business Analysis", "Product Operations", "Product", "Data"].map((item) => (
-                      <span key={item} className="rounded-full bg-[#f3eadf] px-3 py-1 text-[#243850]">{item}</span>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#9b6d4f]">Open to</p>
-                  <p className="mt-2 leading-7">France · Spain · Portugal · Europe</p>
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#9b6d4f]">Languages</p>
-                  <p className="mt-2 leading-7">French · English · Spanish · Italian · Hindi</p>
-                </div>
-              </div>
-
-              <div className="mt-7 flex flex-wrap gap-2 border-t border-[#dfd0bd] pt-5">
-                <Button type="button" onClick={copyEmail}>
-                  <Copy className="h-4 w-4" />
-                  Copy email
-                </Button>
-                <Button asChild variant="secondary">
-                  <a href={portfolioData.person.cv} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("cv_download_click", "contact")}>
-                    <FileText className="h-4 w-4" />
-                    CV
-                  </a>
-                </Button>
-                <Button asChild variant="ghost">
-                  <a href={portfolioData.person.linkedin} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("linkedin_click", "contact")}>
-                    <Linkedin className="h-4 w-4" />
-                    LinkedIn
-                  </a>
-                </Button>
-              </div>
-              <div
-                aria-live="polite"
-                className={`pointer-events-none absolute bottom-5 left-6 rounded-full bg-[#243850] px-3 py-1.5 text-sm text-white shadow-paper transition duration-300 ${
-                  copied ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
-                }`}
-              >
-                Email copied
-              </div>
-            </aside>
-          </div>
+            <label htmlFor="contact-message">A few words<textarea id="contact-message" name="message" rows={4} required maxLength={5000} /></label>
+            <input type="hidden" name="_subject" value="A message from Shana's portfolio" />
+            <div className={styles.honeypot} aria-hidden="true"><label>Leave this empty<input name="_gotcha" tabIndex={-1} autoComplete="off" /></label></div>
+            <button className={styles.send} type="submit" disabled={formState === "sending"}><Send size={16} aria-hidden="true" />{formState === "sending" ? "Sending..." : "Send a message"}</button>
+            <p className={styles.formStatus} role="status">{formState === "success" ? "Thank you! Your message has been sent." : formState === "error" ? "Your message could not be sent. Please try again or contact me by email. Your text is still here." : ""}</p>
+          </form>
         </div>
+        <aside className={styles.address} aria-label="Location and opportunities">
+          <div className={styles.stamp}><Plane size={30} strokeWidth={1.4} aria-hidden="true" /><span>PARIS<strong>OPEN INTERNATIONALLY</strong></span></div>
+          <dl>
+            <div><dt>Based in</dt><dd>Paris, France</dd></div>
+            <div><dt>Looking for</dt><dd>Business Analysis · Product Operations · Data Analysis</dd></div>
+            <div><dt>Open to</dt><dd>Europe · Asia · Canada · Morocco</dd></div>
+            <div><dt>Languages</dt><dd>French · English · Spanish · Italian · Hindi</dd></div>
+          </dl>
+          <div className={styles.links}>
+            <a className={styles.email} href={`mailto:${portfolioData.person.email}`}>{portfolioData.person.email}<ArrowUpRight size={14} aria-hidden="true" /></a>
+            <a href={portfolioData.person.linkedin} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("linkedin_click", "contact")}><Linkedin size={17} aria-hidden="true" />LinkedIn<ArrowUpRight size={14} aria-hidden="true" /></a>
+            <a href={portfolioData.person.cv} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent("cv_download_click", "contact")}><FileText size={17} aria-hidden="true" />Read my CV<ArrowUpRight size={14} aria-hidden="true" /></a>
+            <button type="button" onClick={copyEmail}>{message === "Email copied" ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}Copy email</button>
+          </div>
+          <p className={styles.feedback} role="status">{message}</p>
+        </aside>
       </div>
-    </section>
-  );
+    </div>
+  </section>;
 }
-
