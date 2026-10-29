@@ -41,7 +41,7 @@
       problem: "The offer needed clearer segmentation, repeatable follow-up and a shared view of partner needs.",
       did: "Mapped needs, supported workshops, created personas, tracked dashboards and helped iterate the offer.",
       tools: ["Metabase", "Sellsy", "Trello", "Workshops"],
-      outcome: "+40% partner engagement.",
+      outcome: "A clearer offer built around recurring partner needs.",
       learned: "A reusable operating picture can make complex partner work easier for everyone."
     },
     {

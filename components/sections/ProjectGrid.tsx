@@ -1,30 +1,32 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode, type CSSProperties } from "react";
-import { ArrowDownRight, ArrowLeft, ArrowRight, AudioLines, BarChart3, Check, ChevronDown, FileText, FlaskConical, Network, Search, Sparkles, Timer, UsersRound, WalletCards, MapPin, Compass } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowDownRight, ArrowLeft, ArrowRight, AudioLines, BarChart3, Check, FileText, FlaskConical, Network, Search, Sparkles, Timer, UsersRound, WalletCards, MapPin, Compass } from "lucide-react";
 import { portfolioData } from "@/data/portfolioData";
 import { trackEvent } from "@/lib/analytics";
 import styles from "./WorkChapters.module.css";
-import { Pause, Play, X, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, RotateCcw } from "lucide-react";
 import { useAutoBrowse } from "./useAutoBrowse";
+import { PixComparison } from "./PixComparison";
 
 const pixNotes = [
   { project: portfolioData.projects[3], icon: Timer, title: "Give a repeated task its time back.", result: "20–25 min → under 5 min", caption: "Excel file preparation", summary: "The same cleaning and checking steps came back with every file. I built a VBA macro so they no longer had to be done by hand." },
   { project: portfolioData.projects[1], icon: Network, title: "Make the next follow-up visible.", result: "A clearer next action", caption: "CRM & team coordination", summary: "Follow-up information was spread across tools and conversations. I helped organise Sellsy pipelines, segmentation and reminders around the team's work." },
-  { project: portfolioData.projects[0], icon: UsersRound, title: "Turn repeated needs into a clearer offer.", result: "+40% partner engagement", caption: "Local authorities offer", summary: "Partner requests sounded different, but many needs repeated. Workshops, personas and feedback loops helped us see what could be shared." },
-  { project: portfolioData.projects[2], icon: FileText, title: "Let an answer help more than once.", result: "Around 30% fewer repeated questions", caption: "Documentation & shared knowledge", summary: "Useful answers were getting lost in conversations. I brought guides, FAQs and resources into a shared place people could return to." }
+  { project: portfolioData.projects[0], icon: UsersRound, title: "Turn repeated needs into a clearer offer.", result: "Recurring needs, shared offer", caption: "Local authorities offer", summary: "Workshops, personas and feedback helped turn recurring partner needs into a clearer offer." },
+  { project: portfolioData.projects[2], icon: FileText, title: "Let an answer help more than once.", result: "Around 30% fewer repeated questions", caption: "Documentation & shared knowledge", summary: "Guides, FAQs and resources moved into one shared place, so useful answers could be found again." }
 ];
 
 const experiments = [
   {
-    id: "finance", title: "Investment & Trading Dashboard", category: "Finance & Data", status: "V1 · Evolving",
+    id: "finance", title: "Investment & Trading Dashboard", category: "Finance & Data",
     problem: "As I learned more about investing and options, I wanted a clearer view of my positions instead of piecing information together across accounts.",
     approach: "I built an Excel dashboard to follow stock and options positions, profit and loss, currencies and broker activity. Keeping the calculations and data consistent became an important part of the work.",
     learning: "I enjoy understanding how a decision changes under different scenarios. My interest in options pushes me to think about probabilities and risk, and to keep clear rules when emotions get involved.",
     tools: "Excel · Financial data modelling · Portfolio tracking"
   },
   {
-    id: "job", title: "SHA Job Copilot", category: "Product", status: "V1 · Evolving",
+    id: "job", title: "SHA Job Copilot", category: "Product",
     hook: "A job search has enough moving parts already.",
     copy: "I wanted one place for opportunities, applications and the documents that go with them. So I started building it.",
     problem: "Comparing a job with my profile was one task. Finding the right CV, remembering a previous letter and tracking the application were three more.",
@@ -34,7 +36,7 @@ const experiments = [
     notes: ["Compare opportunities", "Keep the context", "Follow the next step"]
   },
   {
-    id: "skin", title: "SHA Skinventory", category: "Product", status: "V1 · Evolving",
+    id: "skin", title: "SHA Skinventory", category: "Product",
     hook: "I bought it. Then found another one at home.",
     copy: "A skincare inventory grew into a small system for knowing what I own, what is running out and what should replace it.",
     problem: "I could not always remember what was already open, what I had in reserve or when I would need to buy a replacement.",
@@ -44,7 +46,7 @@ const experiments = [
     notes: ["What I own", "What runs out next", "What replaces it"]
   },
   {
-    id: "sales", title: "Sales, made easier to read", category: "Data", status: "V1 · Evolving",
+    id: "sales", title: "Sales, made easier to read", category: "Data",
     hook: "Start with a business question. Then a chart.",
     copy: "A Power BI project for my family's business, bringing sales and customer information into a view that is easier to explore.",
     problem: "Sales records contain plenty of information. Making useful comparisons requires clean data and clear definitions first.",
@@ -54,7 +56,7 @@ const experiments = [
     notes: ["Clean the records", "Connect the data", "Explore performance"]
   },
   {
-    id: "jarvis", title: "JARVIS", category: "AI", status: "V1 · Evolving",
+    id: "jarvis", title: "JARVIS", category: "AI",
     hook: "It started with a Telegram bot and a question.",
     copy: "Could the voice notes, links and other inputs I collect become something useful more easily? This is where I test that idea.",
     problem: "Useful information arrives in different formats. Reading, transcribing and pulling out the important parts can take longer than expected.",
@@ -64,7 +66,7 @@ const experiments = [
     notes: ["A voice note or link", "Transcribe & summarise", "Something to act on"]
   },
   {
-    id: "travel", title: "SHA Travel OS", category: "Product", status: "V1 · Evolving",
+    id: "travel", title: "SHA Travel OS", category: "Product",
     problem: "Planning a trip can leave useful places, activities and ideas scattered across different notes and lists.",
     approach: "I built a first version connecting city guides, saved places, activities and itineraries. The focus is on organising the information around how a trip takes shape. I am now refining the experience and adding features.",
     learning: "I want enough structure to make planning easier, while leaving room to change plans and discover somewhere unexpected.",
@@ -72,11 +74,44 @@ const experiments = [
   }
 ];
 
-function NoteDetails({ title, children }: { title: string; children: ReactNode }) {
-  return <details className={styles.details} onToggle={(event) => { if (event.currentTarget.open) trackEvent("project_note_open", title); }}>
-    <summary><span>Read the story <span className="sr-only">of {title}</span></span><ChevronDown size={18} aria-hidden="true" /></summary>
-    <div className={styles.detailBody}>{children}</div>
-  </details>;
+type PixCase = {
+  title: string; summary: string; result: string;
+  project: { title: string; problem: string; did: string; learned: string; tools: string[] };
+};
+
+function PixCasePanel({ item, index, active, nextLabel, onNext }: { item: PixCase; index: number; active: boolean; nextLabel: string; onNext: () => void }) {
+  const [reading, setReading] = useState(false);
+  const openButton = useRef<HTMLButtonElement>(null);
+  const backButton = useRef<HTMLButtonElement>(null);
+  const hasOpened = useRef(false);
+  useEffect(() => {
+    if (!hasOpened.current) return;
+    (reading ? backButton : openButton).current?.focus({ preventScroll: !reading });
+  }, [reading]);
+  return <article className={styles.casePreview} aria-label={item.project.title} aria-hidden={!active} inert={!active} style={{ visibility: active ? "visible" : "hidden" }} data-autopause>
+    <div className={styles.caseOverview} aria-hidden={reading} inert={reading} style={{ visibility: reading ? "hidden" : undefined }}>
+      <div className={styles.caseVisual}>{active ? <PixComparison index={index} result={item.result} /> : null}</div>
+      <div className={styles.caseReading}>
+        <h3>{item.title}</h3><p>{item.summary}</p>
+        <button ref={openButton} data-case-open className={styles.caseStoryButton} type="button" aria-expanded={reading} aria-controls={`pix-story-${index}`} onClick={() => {
+          hasOpened.current = true;
+          setReading(true);
+          trackEvent("project_note_open", item.project.title);
+        }}>Read the story <ArrowRight size={18} aria-hidden="true" /></button>
+        <p className={styles.tools}>{item.project.tools.join(" · ")}</p>
+      </div>
+    </div>
+    <div id={`pix-story-${index}`} className={styles.caseStory} aria-hidden={!reading} inert={!reading} style={{ visibility: reading ? "visible" : "hidden" }}>
+      <div className={styles.caseStoryHeader}><span>At Pix / 0{index + 1}</span><button ref={backButton} type="button" onClick={() => setReading(false)}><ArrowLeft size={16} aria-hidden="true" />Back to overview</button></div>
+      <div className={styles.caseStoryBody} tabIndex={reading && active ? 0 : -1} role="region" aria-label={`${item.project.title}: full story`}>
+        <h3>{item.project.title}</h3>
+        <div className={styles.detailBody}><Reflection label="The context">{item.project.problem}</Reflection><Reflection label="What I did">{item.project.did}</Reflection><Reflection label="What I learned">{item.project.learned}</Reflection></div>
+        <p className={styles.caseStoryResult}>{item.result}</p>
+        <p className={styles.tools}>{item.project.tools.join(" · ")}</p>
+      </div>
+      <div className={styles.caseStoryFooter}><span>Up next<br /><strong>{nextLabel}</strong></span><button type="button" aria-label={`Next Pix case: ${nextLabel}`} onClick={onNext}>Next <ArrowRight size={17} aria-hidden="true" /></button></div>
+    </div>
+  </article>;
 }
 
 function Reflection({ label, children }: { label: string; children: ReactNode }) {
@@ -97,40 +132,32 @@ function ExperimentSketch({ project }: { project: typeof experiments[number] }) 
 
 export function ProjectGrid() {
   const [selected, setSelected] = useState(0);
-  const caseRotation = useAutoBrowse(() => setSelected(value => (value + 1) % 5), 6000);
+  const stage = useRef<HTMLDivElement>(null);
+  const focusNextOverview = useRef(false);
+  useEffect(() => {
+    if (!focusNextOverview.current) return;
+    focusNextOverview.current = false;
+    stage.current?.querySelector<HTMLButtonElement>('article[aria-hidden="false"] [data-case-open]')?.focus({ preventScroll: true });
+  }, [selected]);
+  const caseRotation = useAutoBrowse(() => setSelected(value => (value + 1) % 5), 5000);
   const cases = [...pixNotes, {
     project: { title: "Understanding user adoption", problem: "Usage varied between local authorities. The numbers alone could not explain why.", did: "I used SQL and Metabase to investigate usage and data inconsistencies, then compared the findings with partner feedback.", learned: "A difference in the data is a starting point for a conversation.", tools: ["SQL", "Metabase", "Partner feedback"] },
     icon: BarChart3, title: "Understand what sits behind the numbers.", result: "~35 local authorities", caption: "Data & adoption", summary: "Connecting usage data with partner feedback to understand differences in adoption."
   }];
-  const current = cases[selected];
-  const CaseIcon = current.icon;
-  const transformations = [
-    ["Manual preparation", "A repeatable macro"],
-    ["Scattered follow-up", "A visible next action"],
-    ["Individual requests", "Shared partner needs"],
-    ["Repeated questions", "Reusable answers"],
-    ["Usage data", "Partner context"]
-  ];
   return <div id="work" className={styles.workChapters}>
     <section className={styles.professional} aria-labelledby="pix-heading">
       <div className="section-shell" ref={caseRotation.ref}>
         <div className={styles.chapterLabel}><span>02 / Selected work</span><span>At work & on my own</span></div>
-        <div className={styles.subchapter}><span>At Pix / Business analysis & operations</span><button data-autoplay-control type="button" onClick={caseRotation.toggle} aria-label={caseRotation.paused ? "Play work rotation" : "Pause work rotation"}>{caseRotation.paused ? <Play size={16} /> : <Pause size={16} />}</button></div>
+        <div className={styles.subchapter}><span>At Pix / Business analysis & operations</span></div>
         <div className={styles.compactHeading}><h2 id="pix-heading" className={styles.headline}>Small changes.<br /><em>Work that gets easier.</em></h2><p>Data, CRM and small automations that helped the team at Pix.</p></div>
         <div className={styles.caseExplorer}>
           <div className={styles.caseChoices} role="group" aria-label="Choose a Pix case">{cases.map((item, index) => <button type="button" key={item.caption} aria-pressed={selected === index} aria-controls="case-preview" onClick={() => setSelected(index)}><item.icon size={20} strokeWidth={1.5} aria-hidden="true" /><span><strong>{item.caption}</strong><small>{item.result}</small></span><ArrowRight size={17} aria-hidden="true" /></button>)}</div>
-          <article id="case-preview" className={styles.casePreview} aria-label={current.project.title}>
-            <div className={styles.caseVisual} key={"visual-" + selected}>
-              <CaseIcon size={30} strokeWidth={1.3} aria-hidden="true" />
-              <p className={styles.bigResult}>{current.result}</p>
-              {selected === 0 ? <div className={styles.timeBars} aria-hidden="true"><span><i />Before</span><span><i />After</span></div> : <div className={styles.transformation}><span>{transformations[selected][0]}</span><ArrowRight size={22} aria-hidden="true" /><strong>{transformations[selected][1]}</strong></div>}
-            </div>
-            <div className={styles.caseReading} key={"copy-" + selected}>
-              <h3>{current.title}</h3><p>{current.summary}</p>
-              <NoteDetails title={current.project.title}><Reflection label="The problem">{current.project.problem}</Reflection><Reflection label="My contribution">{current.project.did}</Reflection><Reflection label="What I learned">{current.project.learned}</Reflection></NoteDetails>
-              <p className={styles.tools}>{current.project.tools.join(" · ")}</p>
-            </div>
-          </article>
+          <div id="case-preview" ref={stage} className={styles.caseStage}>
+            {cases.map((item, index) => <PixCasePanel key={`${selected}-${item.caption}`} item={item} index={index} active={selected === index} nextLabel={cases[(index + 1) % cases.length].caption} onNext={() => {
+              focusNextOverview.current = true;
+              setSelected((index + 1) % cases.length);
+            }} />)}
+          </div>
         </div>
       </div>
     </section>
@@ -158,116 +185,167 @@ const projectSnapshots = [
 
 function PersonalCollection() {
   const [active, setActive] = useState(0);
-  const [story, setStory] = useState<number | null>(null);
-  const dialog = useRef<HTMLDialogElement>(null);
-  const storyBody = useRef<HTMLDivElement>(null);
+  const [leaving, setLeaving] = useState<{ index: number; direction: number } | null>(null);
+  const reducedMotion = useReducedMotion();
+  const [isReading, setIsReading] = useState(false);
+  const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
+  const [isFlipAnimating, setIsFlipAnimating] = useState(false);
   const deck = useRef<HTMLDivElement>(null);
-  const isStoryOpen = story !== null;
-  const gesture = useRef<{ x: number; y: number } | null>(null);
+  const storyFlipTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingFlipIndex = useRef<number | null>(null);
   const suppressClick = useRef(false);
-  const rotation = useAutoBrowse(() => { if (story === null) setActive(value => (value + 1) % experiments.length); }, 6000);
-  function move(direction: number) { setActive(value => (value + direction + experiments.length) % experiments.length); }
+  const focusCardAfterMove = useRef(false);
+  const storyVisible = isReading && flippedIndex === active && !isFlipAnimating;
+  const rotation = useAutoBrowse(() => move(1), storyVisible ? 16000 : 8000);
+  function choose(index: number, direction = index > active ? 1 : -1) {
+    if (leaving || index === active) return;
+    const previous = active;
+    if (storyFlipTimer.current) window.clearTimeout(storyFlipTimer.current);
+    storyFlipTimer.current = null;
+    if (!reducedMotion) setLeaving({ index: previous, direction });
+    setActive(index);
+    if (isReading) {
+      setFlippedIndex(previous);
+      pendingFlipIndex.current = index;
+      trackEvent("project_note_open", experiments[index].title);
+      if (reducedMotion) {
+        pendingFlipIndex.current = null;
+        showNextStoryFront(index);
+      }
+    }
+  }
+  function move(direction: number) { choose((active + direction + experiments.length) % experiments.length, direction); }
+
+  function showNextStoryFront(index: number) {
+    setFlippedIndex(null);
+    setIsFlipAnimating(false);
+    storyFlipTimer.current = setTimeout(() => {
+      storyFlipTimer.current = null;
+      setIsFlipAnimating(!reducedMotion);
+      setFlippedIndex(index);
+    }, 2000);
+  }
 
   useEffect(() => {
-    const modal = dialog.current;
-    if (!isStoryOpen || !modal) return;
-    const previousOverflow = document.body.style.overflow;
-    modal.showModal();
-    document.body.style.overflow = "hidden";
-    return () => { modal.close(); document.body.style.overflow = previousOverflow; };
-  }, [isStoryOpen]);
-
-  useEffect(() => { if (story !== null) storyBody.current?.scrollTo({ top: 0, behavior: "instant" }); }, [story]);
-
-  function moveStory(direction: number) {
-    if (story === null) return;
-    const next = (story + direction + experiments.length) % experiments.length;
-    setStory(next);
-    setActive(next);
-    trackEvent("project_note_open", experiments[next].title);
-  }
+    if (!focusCardAfterMove.current) return;
+    focusCardAfterMove.current = false;
+    deck.current?.querySelector<HTMLButtonElement>('[data-active="true"] button')?.focus({ preventScroll: true });
+  }, [active]);
 
   function openStory(index: number) {
-    setStory(index);
+    if (storyFlipTimer.current) window.clearTimeout(storyFlipTimer.current);
+    storyFlipTimer.current = null;
+    pendingFlipIndex.current = null;
+    setLeaving(null);
+    setIsReading(true);
+    setIsFlipAnimating(!reducedMotion);
+    setFlippedIndex(index);
     trackEvent("project_note_open", experiments[index].title);
   }
-  const opened = story === null ? null : experiments[story];
+  function closeStory() {
+    if (storyFlipTimer.current) window.clearTimeout(storyFlipTimer.current);
+    storyFlipTimer.current = null;
+    pendingFlipIndex.current = null;
+    setIsReading(false);
+    setIsFlipAnimating(!reducedMotion);
+    setFlippedIndex(null);
+  }
+
+  useEffect(() => () => {
+    if (storyFlipTimer.current) window.clearTimeout(storyFlipTimer.current);
+  }, []);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      const showingStory = isReading && flippedIndex === active;
+      const target = showingStory
+        ? '.deckCard[data-active="true"][data-flipped="true"] [data-story-back]'
+        : '.deckCard[data-active="true"] [data-story-open]';
+      deck.current?.querySelector<HTMLButtonElement>(target)?.focus({ preventScroll: true });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [active, isReading, flippedIndex]);
   return <section className={styles.curiosity} aria-labelledby="build-heading">
     <div className="section-shell" ref={rotation.ref}>
-      <div className={styles.subchapter}><span>On my own / Built from curiosity</span><button data-autoplay-control type="button" onClick={rotation.toggle} aria-label={rotation.paused ? "Play project rotation" : "Pause project rotation"} title={rotation.paused ? "Play" : "Pause"}>{rotation.paused ? <Play size={16} /> : <Pause size={16} />}</button></div>
+      <div className={styles.subchapter}><span>On my own / Built from curiosity</span></div>
       <div className={styles.compactHeading}><h2 id="build-heading" className={styles.headline}>I had a problem.<br /><em>So I started building.</em></h2><p>Six small starting points.<br />A collection of things I wanted to make easier.</p></div>
-      <div className={styles.collection} role="region" aria-roledescription="carousel" aria-label="Personal projects" onKeyDown={event => {
-        if (event.key === "ArrowRight" || event.key === "ArrowLeft") { event.preventDefault(); move(event.key === "ArrowRight" ? 1 : -1); }
+      <div className={styles.collection} role="region" aria-roledescription="carousel" aria-label="Personal projects" aria-busy={Boolean(leaving)} onKeyDown={event => {
+        if (event.key === "ArrowRight" || event.key === "ArrowLeft") { event.preventDefault(); focusCardAfterMove.current = true; move(event.key === "ArrowRight" ? 1 : -1); }
       }}>
-        <div id="personal-projects" ref={deck} className={styles.deck} onPointerDown={event => { gesture.current = { x: event.clientX, y: event.clientY }; suppressClick.current = false; }} onPointerCancel={() => { gesture.current = null; }} onPointerUp={event => {
-          if (!gesture.current) return;
-          const dx = event.clientX - gesture.current.x;
-          const dy = event.clientY - gesture.current.y;
-          gesture.current = null;
-          if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.3) { suppressClick.current = true; move(dx < 0 ? 1 : -1); }
-        }}>
+        <div id="personal-projects" ref={deck} className={styles.deck} onPointerDown={() => { suppressClick.current = false; }}>
           {experiments.map((project, index) => {
             let offset = (index - active + experiments.length) % experiments.length;
             if (offset > experiments.length / 2) offset -= experiments.length;
             const hidden = Math.abs(offset) > 1;
-            return <article key={project.id} className={styles.deckCard} data-active={offset === 0} aria-hidden={offset !== 0} inert={hidden} style={{ "--offset": offset, "--scale": offset === 0 ? 1 : .88, "--lift": offset === 0 ? "0px" : "20px", zIndex: 4 - Math.abs(offset), opacity: hidden ? 0 : 1 } as CSSProperties}>
-              <ExperimentSketch project={project} />
-              <div className={styles.deckCopy}>
-                <div className={styles.projectMeta}><span>{project.category}</span><span>{project.status}</span></div>
-                <h3 className={styles.cardTitle}>{project.title}</h3>
-                <p className={styles.cardHook}>{collectionNotes[index].hook}</p>
-                <p className={styles.deckSummary}>{collectionNotes[index].summary}</p>
-                <p className={styles.cardSkills}>{projectSnapshots[index].skills}</p>
-                <span className={styles.openStory}>Read the story <ArrowUpRight size={19} aria-hidden="true" /></span>
+            const isLeaving = leaving?.index === index;
+            const isActive = offset === 0;
+            const isFlipped = flippedIndex === index;
+            return <motion.article key={project.id} className={styles.deckCard} data-active={isActive} data-flipped={isFlipped} aria-hidden={!isActive} inert={hidden || isLeaving || (!isActive && !isLeaving)} initial={false} data-autopause
+              animate={{ x: isLeaving ? `${-leaving.direction * 95}%` : `${offset * 28}%`, y: isLeaving ? -15 : isActive && isReading ? -14 : isActive ? 0 : 18, scale: isLeaving ? .98 : isActive ? 1 : .91, rotate: isLeaving ? -leaving.direction * 12 : offset * -5, opacity: hidden || isLeaving ? 0 : 1 }}
+              transition={{ duration: reducedMotion ? 0 : .48, ease: [.22,.7,.2,1] }}
+              style={{ zIndex: isLeaving ? 8 : isActive ? 6 : 4 - Math.abs(offset), touchAction: "pan-y" }}
+              whileHover={isActive && !leaving && !reducedMotion ? { y: isReading ? -22 : -5 } : undefined}
+              drag={isActive && !leaving ? "x" : false} dragConstraints={{ left: 0, right: 0 }} dragElastic={reducedMotion ? 0 : .35} dragMomentum={false}
+              whileDrag={reducedMotion ? { cursor: "grabbing" } : { scale: 1.015, rotate: 0, cursor: "grabbing" }}
+              onDragStart={() => { suppressClick.current = true; }}
+              onDragEnd={(_, info) => { if (Math.abs(info.offset.x) > 50 || Math.abs(info.velocity.x) > 500) move(info.offset.x < 0 ? 1 : -1); }}
+              onAnimationComplete={() => {
+                if (!isLeaving) return;
+                setLeaving(null);
+                const nextStory = pendingFlipIndex.current;
+                if (isReading && nextStory === active) {
+                  pendingFlipIndex.current = null;
+                  showNextStoryFront(nextStory);
+                }
+              }}>
+              <div className={styles.flipInner} data-flipped={isFlipped} data-flipping={isFlipAnimating} onTransitionEnd={event => {
+                if (event.target === event.currentTarget && event.propertyName === "transform") setIsFlipAnimating(false);
+              }}>
+                <div className={styles.cardFace} aria-hidden={isFlipped} inert={isFlipped}>
+                  <ExperimentSketch project={project} />
+                  <div className={styles.deckCopy}>
+                    <div className={styles.projectMeta}><span>{project.category}</span></div>
+                    <h3 className={styles.cardTitle}>{project.title}</h3>
+                    <p className={styles.cardHook}>{collectionNotes[index].hook}</p>
+                    <p className={styles.deckSummary}>{collectionNotes[index].summary}</p>
+                    <p className={styles.cardSkills}>{projectSnapshots[index].skills}</p>
+                    <button type="button" className={styles.openStory} data-story-open tabIndex={isActive && !isFlipped ? 0 : -1} aria-label={`Read the story of ${project.title}`} onClick={() => {
+                      if (suppressClick.current) { suppressClick.current = false; return; }
+                      openStory(index);
+                    }}>Read the story <ArrowUpRight size={19} aria-hidden="true" /></button>
+                  </div>
+                </div>
+                <div className={styles.cardFaceBack} aria-hidden={!isFlipped} inert={!isFlipped}>
+                  <div className={styles.storyToolbar}>
+                    <span>{project.category} / {String(index + 1).padStart(2, "0")} of 06</span>
+                    <button type="button" data-story-back tabIndex={isActive && isFlipped ? 0 : -1} aria-label="Back to project card" onClick={closeStory}><RotateCcw size={17} aria-hidden="true" /><span>Back to card</span></button>
+                  </div>
+                  <div className={styles.storyCardContent}>
+                    <h3>{project.title}</h3>
+                    <p className={styles.cardHook}>{collectionNotes[index].hook}</p>
+                    <p className={styles.storySkills}>{projectSnapshots[index].skills}</p>
+                    <div className={styles.storyReflections}>
+                      <Reflection label="The starting point">{project.problem}</Reflection>
+                      <Reflection label="What I built">{project.approach}</Reflection>
+                      <Reflection label="What I'm learning">{project.learning}</Reflection>
+                    </div>
+                  </div>
+                  <nav className={styles.storyNavigation} aria-label="Browse project stories">
+                    <button type="button" tabIndex={isActive && isFlipped ? 0 : -1} aria-label="Previous project story" onClick={() => move(-1)}><ArrowLeft size={19} aria-hidden="true" /><span>Previous</span></button>
+                    <button type="button" tabIndex={isActive && isFlipped ? 0 : -1} aria-label="Next project story" onClick={() => move(1)}><span>Next project</span><ArrowRight size={19} aria-hidden="true" /></button>
+                  </nav>
+                </div>
               </div>
-              <button type="button" className={styles.cardHitArea} tabIndex={offset === 0 ? 0 : -1} aria-label={`Read the story of ${project.title}`} aria-haspopup="dialog" onClick={() => {
-                if (suppressClick.current) { suppressClick.current = false; return; }
-                if (offset !== 0) setActive(index); else openStory(index);
-              }} />
-            </article>;
+            </motion.article>;
           })}
         </div>
         <div className={styles.deckControls}>
-          <button type="button" aria-label="Previous project" aria-controls="personal-projects" onClick={() => move(-1)}><ArrowLeft size={20} /></button>
+          <button type="button" aria-label="Previous project" aria-controls="personal-projects" disabled={Boolean(leaving)} onClick={() => move(-1)}><ArrowLeft size={20} /></button>
           <span><strong>{String(active + 1).padStart(2, "0")}</strong> / 06</span>
-          <button type="button" aria-label="Next project" aria-controls="personal-projects" onClick={() => move(1)}><ArrowRight size={20} /></button>
+          <button type="button" aria-label="Next project" aria-controls="personal-projects" disabled={Boolean(leaving)} onClick={() => move(1)}><ArrowRight size={20} /></button>
         </div>
-        <div className={styles.collectionIndex} role="group" aria-label="Choose a personal project">{experiments.map((project, index) => <button type="button" key={project.id} aria-pressed={active === index} aria-controls="personal-projects" onClick={() => setActive(index)}>{collectionNotes[index].short}</button>)}</div>
+        <div className={styles.collectionIndex} role="group" aria-label="Choose a personal project">{experiments.map((project, index) => <button type="button" key={project.id} aria-pressed={active === index} aria-controls="personal-projects" onClick={() => choose(index)}>{collectionNotes[index].short}</button>)}</div>
       </div>
     </div>
-    <dialog ref={dialog} className={styles.storyDialog} aria-labelledby="project-story-title" onClose={() => {
-      setStory(null);
-      requestAnimationFrame(() => deck.current?.querySelector<HTMLButtonElement>('[data-active="true"] button')?.focus());
-    }} onKeyDown={event => {
-      if (event.key === "Tab") {
-        const items = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('button, summary, a[href], [tabindex="0"]'));
-        const first = items[0];
-        const last = items[items.length - 1];
-        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
-        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
-      }
-      if (event.key === "ArrowRight" || event.key === "ArrowLeft") { event.preventDefault(); moveStory(event.key === "ArrowRight" ? 1 : -1); }
-    }} onClick={event => {
-      if (event.target !== event.currentTarget) return;
-      const bounds = event.currentTarget.getBoundingClientRect();
-      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) event.currentTarget.close();
-    }}>
-      {opened ? <>
-        <div className={styles.dialogToolbar}>
-          <span>{opened.status} / {opened.category}</span><button type="button" aria-label="Close project story" onClick={() => dialog.current?.close()}><X size={21} /></button>
-          <span className={styles.storyCount} aria-live="polite">{String(story! + 1).padStart(2, "0")} / 06</span>
-        </div>
-        <div className={styles.storyContent} ref={storyBody} tabIndex={0} aria-label="Project story">
-          <h2 id="project-story-title" aria-live="polite">{opened.title}</h2>
-          <p className={styles.cardHook}>{collectionNotes[story!].hook}</p>
-          <p className={styles.storySkills}>{projectSnapshots[story!].skills}</p>
-          <div className={styles.storyReflections}><Reflection label="The starting point">{opened.problem}</Reflection><Reflection label="What I built">{opened.approach}</Reflection><Reflection label="What I am learning">{opened.learning}</Reflection></div>
-        </div>
-        <nav className={styles.storyNavigation} aria-label="Browse project stories">
-          <button type="button" aria-label="Previous project story" title="Previous project" onClick={() => moveStory(-1)}><ArrowLeft size={20} aria-hidden="true" /></button>
-          <button className={styles.nextStory} type="button" aria-label="Next project story" onClick={() => moveStory(1)}><span><small>Up next</small>{collectionNotes[(story! + 1) % experiments.length].short}</span><ArrowRight size={20} aria-hidden="true" /></button>
-        </nav>
-      </> : null}
-    </dialog>
   </section>;
 }

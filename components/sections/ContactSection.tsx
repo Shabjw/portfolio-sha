@@ -82,7 +82,7 @@ export function ContactSection() {
           <div className={styles.stamp}><Plane size={30} strokeWidth={1.4} aria-hidden="true" /><span>PARIS<strong>OPEN INTERNATIONALLY</strong></span></div>
           <dl>
             <div><dt>Based in</dt><dd>Paris, France</dd></div>
-            <div><dt>Looking for</dt><dd>Business Analysis · Product Operations · Data Analysis</dd></div>
+            <div><dt>Interested in</dt><dd>Business Analysis · Data Analytics · Product</dd></div>
             <div><dt>Open to</dt><dd>Europe · Asia · Canada · Morocco</dd></div>
             <div><dt>Languages</dt><dd>French · English · Spanish · Italian · Hindi</dd></div>
           </dl>

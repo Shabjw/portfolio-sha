@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Brain, ChartLine, Globe2, Sparkles, Trophy, WandSparkles, Pause, Play } from "lucide-react";
+import { ArrowLeft, ArrowRight, Brain, ChartLine, Club, Globe2, WandSparkles } from "lucide-react";
 import { useAutoBrowse } from "./useAutoBrowse";
 
 import styles from "./MindNotebook.module.css";
@@ -9,70 +9,63 @@ import styles from "./MindNotebook.module.css";
 const topics = [
   {
     title: "AI automation & Codex projects",
+    headline: "I rarely try a new AI tool just once.",
     icon: WandSparkles,
     note: [
-      "I started using AI because I was curious.",
-      "I kept using it because it changed the way I solve problems.",
-      "Today I use tools like Codex to build small systems, test ideas quickly and automate repetitive work. Whenever I discover something genuinely useful, I'm usually the first one sending it to friends or finding a way to use it in everyday life."
-    ]
+      "I usually start by testing something out of curiosity. Then I wonder what else I could do with it, and before I know it, I'm experimenting with an API, building something with Codex or showing a friend what I just discovered.",
+      "I think that's what I enjoy most about AI. Being able to take an idea, even a slightly random one, and actually try it out."
+    ],
+    margin: "I wonder if this could work..."
   },
   {
     title: "Product thinking",
+    headline: "My notes are full of things I might never build.",
     icon: Brain,
     note: [
-      "Product ideas have a habit of following me everywhere.",
-      "A conversation with friends, something frustrating in a website or a random everyday situation can easily turn into an hour of brainstorming.",
-      "I keep notes of those ideas. Most will probably never exist, but every now and then one starts feeling realistic enough that I actually want to build it."
-    ]
+      "Sometimes it's a conversation with a friend, an annoying feature on a website or just a random thought. I'll start imagining how I'd do it differently, what features I'd add, and suddenly I've spent way too much time thinking about it.",
+      "Most of those ideas stay in my notes. But every now and then, one turns into something I actually want to build."
+    ],
+    margin: "Probably another idea for later."
   },
   {
     title: "Different cultures",
+    headline: "There's usually more than one way to do something.",
     icon: Globe2,
     note: [
-      "Travelling made me realise that people often solve the same problem in completely different ways.",
-      "In Korea, for example, you can press an elevator button a second time to cancel the floor. Tiny detail, huge quality of life improvement.",
-      "Those little discoveries remind me that there is rarely only one good solution. They make me more curious about how different cultures think, design and solve the same problems."
-    ]
+      "I grew up surrounded by different cultures, both in my family and among the people around me. So I've always been quite interested in the different ways people think, behave and do everyday things.",
+      "I notice it when I travel, but also in conversations or even when watching shows from different countries.",
+      "I love those moments when I realise something I've always considered normal isn't necessarily normal somewhere else. Sometimes the other way even makes more sense!"
+    ],
+    margin: "There's always another perspective."
   },
   {
     title: "Investing",
+    headline: "I like asking what happens if I'm wrong.",
     icon: ChartLine,
     note: [
-      "Investing taught me that good decisions are rarely emotional.",
-      "I mainly focus on long term investing but I also enjoy learning about options strategies because they force you to think in terms of probabilities, scenarios and risk management rather than certainty.",
-      "Taking calculated risks is still uncomfortable sometimes, especially when real money is involved, but building clear rules makes those decisions much easier to stick to.",
-      "The same mindset often applies outside investing too. Good systems usually beat emotional decisions."
-    ]
+      "I've always been interested in understanding how financial markets work. I mainly invest for the long term, but options got me curious about all the different scenarios, probabilities and risks involved.",
+      "I enjoy thinking through those possibilities before making a decision. Of course, sticking to a plan is a lot easier in theory than when real money is involved. I'm still learning that part."
+    ],
+    margin: "Rules before reactions."
   },
   {
-    title: "Better everyday systems",
-    icon: Sparkles,
+    title: "Games & strategy",
+    headline: "One more round?",
+    icon: Club,
     note: [
-      "I kept forgetting what I already owned.",
-      "Sometimes I bought a skincare product only to realise I already had one at home, or I couldn't remember what would run out next.",
-      "So I started building a system that tracks my products, predicts when they'll be empty, manages replacements and even learns more about my skin over time with AI.",
-      "It slowly became much more than an inventory. It became a way of making everyday decisions simpler, which is probably why I enjoy building systems in the first place."
-    ]
-  },
-  {
-    title: "Badminton",
-    icon: Trophy,
-    note: [
-      "I've been playing badminton regularly since 2018.",
-      "One way I describe how I work is through badminton.",
-      "You observe what's happening, anticipate the next move and constantly adjust your strategy.",
-      "That's surprisingly close to what good business analysis feels like.",
-      "Also... I'm still willing to play in the middle of a heatwave."
-    ]
+      "Badminton is one of my favourite ways to get away from a screen. I love getting completely caught up in a game, and even when I play terribly, I'm usually up for another round.",
+      "I'm also a big fan of Rummy, Monopoly Deal and a card game I've always called Udaka (apparently it's called Gabo!). It's a mix of memory, swapping cards and knowing when to take a chance. Sometimes I'll deliberately keep a high card because I'm convinced I'll find a way to get rid of it later.",
+      "Does it always work? Absolutely not. And somehow, I'm still convinced my next strategy will be better."
+    ],
+    margin: "Just one more game."
   }
 ];
 
-const labels = ["AI & Codex", "Product ideas", "Cultures", "Investing", "Everyday systems", "Badminton"];
-const cues = ["Make room for better work", "An idea worth keeping", "Another way to do things", "Rules before reactions", "One less thing to remember", "Observe. Adjust. Try again."];
+const labels = ["AI & Codex", "Product ideas", "Cultures", "Investing", "Games & strategy"];
 
 export function ThingsOnMyMind() {
   const [activeTopic, setActiveTopic] = useState(0);
-  const rotation = useAutoBrowse(() => setActiveTopic(current => (current + 1) % topics.length), 6000);
+  const rotation = useAutoBrowse(() => setActiveTopic(current => (current + 1) % topics.length), 5000);
   function turnPage(direction: number) {
     setActiveTopic(current => (current + direction + topics.length) % topics.length);
   }
@@ -90,19 +83,18 @@ export function ThingsOnMyMind() {
           </div>
           <p className={styles.annotation} aria-hidden="true">Still asking questions.</p>
         </div>
-        <div className={styles.notebook}>
+        <div className={styles.notebook} data-autopause>
           <div id="mind-pages" className={styles.pages}>
             {topics.map((topic, index) => <article key={topic.title} className={styles.page} aria-hidden={index !== activeTopic} style={{ visibility: index === activeTopic ? "visible" : "hidden" }}>
-              <div className={styles.pageMeta}><span>From my notebook</span></div>
-              <h3><topic.icon size={26} strokeWidth={1.3} aria-hidden="true" />{topic.title}</h3>
-              <div className={styles.note}>{topic.note.map((paragraph, paragraphIndex) => <p key={paragraph} className={paragraphIndex === 0 ? styles.opening : undefined}>{paragraph}</p>)}</div>
-              <p className={styles.margin}>{cues[index]}</p>
+              <div className={styles.pageMeta}><span>{topic.title}</span></div>
+              <h3><topic.icon size={26} strokeWidth={1.3} aria-hidden="true" /><span>{topic.headline}</span></h3>
+              <div className={styles.note}>{topic.note.map(paragraph => <p key={paragraph}>{paragraph}</p>)}</div>
+              <p className={styles.margin}>{topic.margin}</p>
             </article>)}
           </div>
           <div className={styles.pageControls}>
             <button type="button" aria-label="Previous thought" onClick={() => turnPage(-1)}><ArrowLeft size={18} aria-hidden="true" /></button>
-            <span aria-live="polite">Note {String(activeTopic + 1).padStart(2, "0")} / 06</span>
-            <button data-autoplay-control type="button" onClick={rotation.toggle} aria-label={rotation.paused ? "Play notebook rotation" : "Pause notebook rotation"}>{rotation.paused ? <Play size={17} /> : <Pause size={17} />}</button>
+            <span>Note {String(activeTopic + 1).padStart(2, "0")} / {String(topics.length).padStart(2, "0")}</span>
             <button type="button" aria-label="Next thought" onClick={() => turnPage(1)}><ArrowRight size={18} aria-hidden="true" /></button>
           </div>
         </div>

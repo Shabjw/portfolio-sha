@@ -1,0 +1,67 @@
+.comparison { color: #304c40; }
+.header { display: flex; align-items: start; justify-content: space-between; gap: 18px; height: 94px; }
+.header > div:first-child { min-width: 0; }
+.caption { font-size: 11px; color: #627362; }
+.result { font: 600 26px/1.2 Inter, Arial, sans-serif; margin-top: 8px; max-width: 360px; }
+.approximate { display: block; font-size: 11px; margin-top: 6px; color: #627362; }
+.switcher { display: flex; padding: 3px; background: #ffffff6e; border: 1px solid #62736229; border-radius: 30px; flex-shrink: 0; }
+.switcher button { min-height: 38px; padding: 6px 13px; border-radius: 24px; font-size: 12px; color: #52634f; }
+.switcher button[aria-pressed=true] { background: #355343; color: #fff8ed; box-shadow: 0 3px 6px #354e4314; }
+.switcher button:focus-visible { outline: 2px solid #905333; outline-offset: 3px; }
+.diagram { display: grid; align-items: center; height: 168px; padding-top: 8px; }
+.scene { animation: sketchReveal .25s ease-out; }
+.automation { display: flex; align-items: center; justify-content: center; gap: 14px; }
+.file { display: grid; justify-items: center; gap: 8px; text-align: center; font-size: 12px; }
+.file small { font-size: 10px; color: #627362; }
+.macro { display: grid; place-items: center; gap: 4px; width: 68px; height: 68px; background: #fff9ec; border: 1px dashed #a0835c; border-radius: 50%; font-size: 12px; color: #926142; }
+.manual { display: grid; gap: 8px; max-width: 320px; margin: auto; }
+.manual > span { display: flex; align-items: center; gap: 13px; background: #fff9edbf; padding: 9px 14px; border-bottom: 1px solid #ae8e6a33; font-size: 13px; }
+.manual small { color: #987357; font-size: 10px; }
+.manual p { display: flex; justify-content: center; align-items: center; gap: 9px; font-size: 11px; color: #987357; margin-top: 5px; }
+.crm { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; }
+.crm > div { position: relative; display: grid; gap: 12px; justify-items: center; padding: 18px 8px; border-bottom: 2px solid #7b9578; background: #fff9ed99; font-size: 12px; text-align: center; }
+.crm > div + div::before { content: ''; position: absolute; top: 35px; right: 100%; width: 9px; border-top: 1px solid #7b9578; }
+.rule { height: 4px; width: 40px; border-radius: 3px; background: #b0c3a0; }
+.scattered { min-height: 150px; position: relative; width: min(100%,440px); margin: auto; }
+.scattered > span { position: absolute; display: flex; align-items: center; justify-content: center; gap: 9px; padding: 18px 14px; background: #fff8e9; border: 1px solid #bba58b66; box-shadow: 0 7px 16px #7955330c; font-size: 12px; text-align: center; }
+.scattered > span:nth-child(1) { left: 1%; top: 10px; transform: rotate(-7deg); }
+.scattered > span:nth-child(2) { right: 0; top: 30px; transform: rotate(5deg); }
+.scattered > span:nth-child(3) { left: 26%; bottom: 2px; transform: rotate(-2deg); }
+.needs { display: grid; gap: 30px; text-align: center; }
+.needs > strong { display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 19px; }
+.needs > div { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.needs > div span { position: relative; padding: 13px 5px; border-top: 1px solid #6f8b68; font-size: 12px; }
+.needs > div span::before { content: ''; position: absolute; bottom: 100%; left: 50%; height: 15px; border-left: 1px solid #6f8b68; }
+.hub { display: flex; align-items: center; justify-content: center; gap: 25px; }
+.hub > div { display: grid; gap: 8px; font-size: 12px; }
+.hub strong { font-size: 15px; margin-bottom: 5px; }
+.hub span { display: flex; align-items: center; gap: 8px; }
+.dataContext > div { display: flex; align-items: center; justify-content: center; gap: 15px; }
+.dataContext span { display: grid; justify-items: center; gap: 12px; padding: 15px; border-bottom: 1px solid #70866b; background: #fff9ed80; font-size: 12px; }
+.dataContext p { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 24px; font-size: 13px; }
+.records > div { display: grid; gap: 7px; max-width: 280px; margin: auto; padding: 17px; background: #fff9edb3; border: 1px solid #70866b33; }
+.records > div > span { display: grid; grid-template-columns: repeat(5,1fr); gap: 11px; }
+.records i { height: 5px; background: #a8b7a1; }
+.records > div > span:nth-child(2) i:nth-child(3) { background: #bc8d68; }
+.records p { text-align: center; margin-top: 14px; font-size: 12px; }
+@keyframes sketchReveal { from { opacity: 0; translate: 0 3px; } to { opacity: 1; translate: 0 0; } }
+@media (max-width: 600px) {
+  .header { flex-direction: column; gap: 10px; height: 148px; justify-content: flex-start; }
+  .result { font-size: 25px; }
+  .diagram { height: 164px; }
+  .automation { gap: 7px; }
+  .automation > svg { width: 15px; }
+  .macro { width: 56px; height: 56px; }
+  .file { font-size: 11px; }
+  .file small { max-width: 75px; line-height: 1.5; }
+  .scattered > span { padding: 14px 8px; font-size: 11px; }
+  .scattered svg { width: 18px; }
+  .crm > div { font-size: 11px; padding-inline: 4px; }
+  .hub { gap: 16px; }
+  .hub > svg { width: 50px; flex-shrink: 0; }
+  .hub strong { font-size: 13px; }
+  .dataContext > div { gap: 9px; }
+  .dataContext span { padding: 14px 9px; font-size: 11px; }
+  .dataContext p { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .scene { animation: none; } }

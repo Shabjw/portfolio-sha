@@ -5,7 +5,7 @@
 .index h2 em { color: #83624e; }
 .intro { font-size: 15px; line-height: 1.7; max-width: 310px; margin-top: 20px; color: #52616a; }
 .topics { display: grid; gap: 4px; margin-top: 28px; }
-.topics button { display: flex; align-items: center; gap: 14px; min-height: 52px; padding: 12px 14px; text-align: left; border: 1px solid transparent; border-radius: 4px; color: #fff7e9; transition: background .2s, color .2s; }
+.topics button { display: flex; align-items: center; gap: 14px; min-height: 52px; padding: 12px 14px; text-align: left; border: 1px solid transparent; border-radius: 4px; color: #52616a; transition: background .2s, color .2s; }
 .topics button span { font-size: 15px; }
 .topics button small { margin-left: auto; font: italic 14px Georgia, serif; opacity: .7; }
 .topics button svg { flex-shrink: 0; }
@@ -22,9 +22,9 @@
 .pageMeta { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #7a6a58; }
 .page h3 { display: flex; align-items: center; gap: 14px; font: 400 30px/1.25 Georgia,serif; margin: 22px 0 20px; }
 .page h3 svg { flex-shrink: 0; color: #956d4d; }
-.note { font-size: 15px; line-height: 1.8; color: #4b5860; }
-.note p + p { margin-top: 15px; }
-.note .opening { font-size: 17px; font-weight: 500; color: #2e4350; }
+.page h3 > span { min-width: 0; }
+.note { font-size: 16px; line-height: 1.75; color: #4b5860; }
+.note p + p { margin-top: 16px; }
 .margin { margin-top: auto; padding-top: 26px; font: italic 17px/1.5 Georgia,serif; color: #956d4d; }
 .pageControls { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #30475a22; margin: 0 36px; padding: 12px 0; }
 .pageControls span { font-size: 12px; color: #7a6a58; }
@@ -50,4 +50,5 @@
 .topics button { color: #304653; }
 .topics button:hover { background: #fff7e955; }
 .chapter { border-bottom-color: #30465333; }
+@media (max-width: 700px) { .topics button { color: #20354d; } }
 @media (prefers-reduced-motion: reduce) { .topics button, .pageControls button { transition: none; } .page[aria-hidden=false] { animation: none; } }

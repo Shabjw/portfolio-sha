@@ -1,51 +1,70 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-// Rotation stops while someone is reading, interacting, or has opened a story.
+// Hover, keyboard focus and active presses pause temporarily, never permanently.
 export function useAutoBrowse(advance: () => void, delay: number) {
   const ref = useRef<HTMLDivElement>(null);
   const callback = useRef(advance);
-  const [paused, setPaused] = useState(false);
   useEffect(() => { callback.current = advance; }, [advance]);
   useEffect(() => {
     const element = ref.current;
-    if (!element || paused) return;
+    if (!element) return;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const hover = window.matchMedia("(hover: hover)");
     let visible = false;
-    let hovering = window.matchMedia("(hover: hover)").matches && element.matches(":hover");
+    let pressing = false;
+    let hovering = hover.matches && element.matches(":hover");
     let lastInteraction = Date.now();
-    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; lastInteraction = Date.now(); }, { threshold: 0.25 });
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting && entry.intersectionRatio >= .25;
+      lastInteraction = Date.now();
+    }, { threshold: .25 });
     observer.observe(element);
-    const enter = (event: PointerEvent) => { hovering = event.pointerType === "mouse"; };
-    const leave = () => { hovering = false; lastInteraction = Date.now(); };
-    const interact = () => { lastInteraction = Date.now(); };
-    const takeControl = (event: Event) => {
-      if (event.target instanceof Element && !event.target.closest("[data-autoplay-control]")) setPaused(true);
+    const reset = () => { lastInteraction = Date.now(); };
+    const enter = () => {
+      hovering = true;
+      reset();
     };
+    const leave = () => {
+      hovering = false;
+      reset();
+    };
+    const press = (event: PointerEvent) => {
+      if (event.target instanceof Element && event.target.closest("[data-autopause], button, a, summary")) {
+        pressing = true;
+        reset();
+      }
+    };
+    const release = () => { if (pressing) { pressing = false; reset(); } };
+    element.addEventListener("pointerdown", press);
     element.addEventListener("pointerenter", enter);
     element.addEventListener("pointerleave", leave);
-    element.addEventListener("pointerdown", interact);
-    element.addEventListener("pointerdown", takeControl);
-    element.addEventListener("click", takeControl);
-    element.addEventListener("focusout", interact);
-    element.addEventListener("scroll", interact, true);
-    document.addEventListener("visibilitychange", interact);
+    element.addEventListener("click", reset);
+    element.addEventListener("focusout", reset);
+    window.addEventListener("pointerup", release);
+    window.addEventListener("pointercancel", release);
+    document.addEventListener("visibilitychange", reset);
     const timer = window.setInterval(() => {
-      if (!visible || hovering || document.hidden || motion.matches || element.contains(document.activeElement) || element.querySelector("details[open]")) return;
-      if (Date.now() - lastInteraction >= delay) { callback.current(); lastInteraction = Date.now(); }
-    }, 500);
+      const pointerOverSection = hovering && hover.matches;
+      const focused = element.querySelector(":focus-visible");
+      if (!visible || document.hidden || motion.matches || pressing || pointerOverSection || focused || document.querySelector("dialog[open]")) {
+        reset();
+        return;
+      }
+      if (Date.now() - lastInteraction >= delay) { callback.current(); reset(); }
+    }, 100);
     return () => {
       observer.disconnect(); window.clearInterval(timer);
+      element.removeEventListener("pointerdown", press);
       element.removeEventListener("pointerenter", enter);
       element.removeEventListener("pointerleave", leave);
-      element.removeEventListener("pointerdown", interact);
-      element.removeEventListener("pointerdown", takeControl);
-      element.removeEventListener("click", takeControl);
-      element.removeEventListener("focusout", interact);
-      element.removeEventListener("scroll", interact, true);
-      document.removeEventListener("visibilitychange", interact);
+      element.removeEventListener("click", reset);
+      element.removeEventListener("focusout", reset);
+      window.removeEventListener("pointerup", release);
+      window.removeEventListener("pointercancel", release);
+      document.removeEventListener("visibilitychange", reset);
     };
-  }, [delay, paused]);
-  return { ref, paused, toggle: () => setPaused(value => !value) };
+  }, [delay]);
+  return { ref };
 }
