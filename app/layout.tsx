@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from "next";
 import "./globals.css";
+import { PortfolioAnalytics } from "@/components/PortfolioAnalytics";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://shanabhojwani.com"),
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>{children}<PortfolioAnalytics enabled={process.env.VERCEL_ENV === "production"} /></body>
     </html>
   );
 }
