@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test:analytics": "node --test tests/analytics-preferences.test.mjs"
+    "test:analytics": "node --test tests/analytics-preferences.test.mjs tests/visit-alerts.test.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",

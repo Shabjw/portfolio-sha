@@ -1,0 +1,50 @@
+name: Portfolio visit alerts
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/portfolio-visits.yml
+      - scripts/notify-portfolio-visits.mjs
+      - tests/visit-alerts.test.mjs
+  schedule:
+    - cron: "7,22,37,52 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-visit-alerts
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Test alert logic without sending messages
+        run: node --test tests/visit-alerts.test.mjs
+      - name: Restore last observed counts
+        uses: actions/cache/restore@v4
+        with:
+          path: .traffic-state/baseline.json
+          key: portfolio-traffic-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: portfolio-traffic-v1-
+      - name: Check production traffic
+        run: node scripts/notify-portfolio-visits.mjs
+        env:
+          ANALYTICS_READ_TOKEN: ${{ secrets.ANALYTICS_READ_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      - name: Save confirmed baseline
+        uses: actions/cache/save@v4
+        with:
+          path: .traffic-state/baseline.json
+          key: portfolio-traffic-v1-${{ github.run_id }}-${{ github.run_attempt }}
