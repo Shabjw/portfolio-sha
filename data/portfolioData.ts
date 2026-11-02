@@ -8,7 +8,7 @@
     email: "shana.bjw@gmail.com",
     linkedin: "https://www.linkedin.com/in/shana-bjw/",
     github: "#",
-    cv: "/CV/CV%20-%20Shana%20Bhojwani%20-%20Business%20Analyst.pdf"
+    cv: "/CV/Resume%20-%20Shana%20Bhojwani.pdf"
   },
   thinking: [
     {
